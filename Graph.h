@@ -127,18 +127,10 @@ public:
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
-	void unweightedShortestPath(const T &s);
-	void bellmanFordShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
 
-	// Fp05 - all pairs
-	void floydWarshallShortestPath();
-	vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
 	~Graph();
 
-	// Fp07 - minimum spanning tree
-	vector<Vertex<T>*> calculatePrim();
-	vector<Vertex<T>*> calculateKruskal();
 };
 
 
@@ -265,7 +257,7 @@ vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
 	reverse(res.begin(), res.end());
 	return res;
 }
-
+/*
 template<class T>
 void Graph<T>::unweightedShortestPath(const T &orig) {
 	auto s = initSingleSource(orig);
@@ -291,7 +283,7 @@ void Graph<T>::bellmanFordShortestPath(const T &orig) {
 		for (auto e: v->adj)
 			if (relax(v, e.dest, e.weight))
 				cout << "Negative cycle!" << endl;
-}
+}*/
 
 
 /**************** All Pairs Shortest Path  ***************/
@@ -345,37 +337,6 @@ void Graph<T>::floydWarshallShortestPath() {
 				}
 			}
 }
-
-
-template<class T>
-vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
-	vector<T> res;
-	int i = findVertexIdx(orig);
-	int j = findVertexIdx(dest);
-	if (i == -1 || j == -1 || W[i][j] == INF) // missing or disconnected
-		return res;
-	for ( ; j != -1; j = P[i][j])
-		res.push_back(vertexSet[j]->info);
-	reverse(res.begin(), res.end());
-	return res;
-}
-
-/**************** Minimum Spanning Tree  ***************/
-
-template <class T>
-vector<Vertex<T>* > Graph<T>::calculatePrim() {
-	// TODO
-	return vertexSet;
-}
-
-
-
-template <class T>
-vector<Vertex<T>*> Graph<T>::calculateKruskal() {
-	// TODO
-	return vertexSet;
-}
-
 
 
 #endif /* GRAPH_H_ */

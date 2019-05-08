@@ -12,6 +12,55 @@ School::School(string name, int morningTime, int afternoonTime, int x, int y)
 
 }
 
+string School::getName()
+{
+	return name;
+}
+
+void School::setName(string name)
+{
+	this->name = name;
+}
+
+int School::getMorningTime()
+{
+	return morningTime;
+}
+
+void School::setMorningTime(int time)
+{
+	morningTime = time;
+}
+
+int School::getAfternoonTime()
+{
+	return afternoonTime;
+}
+
+void School::setAfternoonTime(int time)
+{
+	afternoonTime = time;
+}
+
+int School::getX()
+{
+	return x;
+}
+
+void School::setX(int x)
+{
+	this->x = x;
+}
+
+int School::getY()
+{
+	return y;
+}
+
+void School::getY(int y)
+{
+}
+
 
 ////////////////STUDENT///////////////////////////////
 
