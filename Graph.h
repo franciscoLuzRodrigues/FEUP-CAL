@@ -124,7 +124,6 @@ public:
 	bool addEdge(const T &sourc, const T &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex<T> *> getVertexSet() const;
-
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
@@ -303,7 +302,7 @@ Graph<T>::~Graph() {
 	deleteMatrix(W, vertexSet.size());
 	deleteMatrix(P, vertexSet.size());
 }
-
+/*
 template<class T>
 void Graph<T>::floydWarshallShortestPath() {
 	unsigned n = vertexSet.size();
@@ -336,7 +335,7 @@ void Graph<T>::floydWarshallShortestPath() {
 					P[i][j] = P[k][j];
 				}
 			}
-}
+}*/
 
 
 #endif /* GRAPH_H_ */

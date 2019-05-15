@@ -2,7 +2,7 @@
 
 ////////////////SCHOOL/////////////////////////////////
 
-School::School(string name, int morningTime, int afternoonTime, int x, int y)
+School::School(string name, int morningTime, int afternoonTime, float x, float y)
 {
 	this->name = name;
 	this->morningTime = morningTime;
@@ -42,22 +42,22 @@ void School::setAfternoonTime(int time)
 	afternoonTime = time;
 }
 
-int School::getX()
+float School::getX()
 {
 	return x;
 }
 
-void School::setX(int x)
+void School::setX(float x)
 {
 	this->x = x;
 }
 
-int School::getY()
+float School::getY()
 {
 	return y;
 }
 
-void School::setY(int y)
+void School::setY(float y)
 {
 	this->y = y;
 }
@@ -104,7 +104,7 @@ void Student::setSchool(School* school)
 
 ///////////////BUSSTOP////////////////////////////////
 
-BusStop::BusStop(int x, int y, vector<Student*> studentsInStop)
+BusStop::BusStop(float x, float y, vector<Student*> studentsInStop)
 {
 	this->studentsInStop = studentsInStop;
 	this->x = x;
@@ -114,19 +114,19 @@ vector<Student*> BusStop::getStudentsInStop()
 {
 	return studentsInStop;
 }
-int BusStop::getX()
+float BusStop::getX()
 {
 	return x;
 }
-void BusStop::setX(int x)
+void BusStop::setX(float x)
 {
 	this->x = x;
 }
-int BusStop::getY()
+float BusStop::getY()
 {
 	return y;
 }
-void BusStop::setY(int y)
+void BusStop::setY(float y)
 {
 	this->y = y;
 }
@@ -183,7 +183,7 @@ void Bus::setOccupation(int occupation)
 }
 //////////////GARAGE//////////////////////////////////
 
-Garage::Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo, int x, int y)
+Garage::Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo, float x, float y)
 {
 	this->numberOfBuses = numberOfBuses;
 	this->busesInGarage = busesInGarage;
@@ -202,22 +202,22 @@ vector<Bus*> Garage::getBusesToGo()
 	return busesToGo;
 }
 
-int Garage::getX()
+float Garage::getX()
 {
 	return x;
 }
 
-void Garage::setX(int x)
+void Garage::setX(float x)
 {
 	this->x = x;
 }
 
-int Garage::getY()
+float Garage::getY()
 {
 	return y;
 }
 
-void Garage::setY(int y)
+void Garage::setY(float y)
 {
 	this->y = y;
 }

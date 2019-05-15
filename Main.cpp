@@ -1,51 +1,78 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "Graph.h"
 #include "SchoolBus.h"
+#include "FileData.h"
+#include <string>
+
 using namespace std;
 
+vector<string> cityVec = {"Aveiro", "Braga", "Coimbra", "Ermesinde", "Fafe", "Gondomar", "Lisboa", "Maia", "Porto", "Viseu"};
 
-Graph<int> createTestGraph()
+////GENERAL FUNCTIONS//// (used throughout project, mostly for input verification)
+int Nav(int bottom, int top)
+{ //tests for valid input keys and returns the inputed char
+	int key;
+	cin >> key;
+	while (cin.fail() || key < bottom || key > top)
+	{ //Problem with cin getting corrupted if several characters are introduced
+		cin.clear();
+		cin.ignore(100, '\n');
+		cout << "Invalid Input!" << endl;
+		cin >> key;
+	}
+	cin.clear();
+	cin.ignore(100, '\n');
+	return key;
+}
+
+void city_menu()
 {
-	Graph<int> myGraph;
+	int choice;
+	cout << "----------------------" << endl;
+	cout << "|       CYTIES       |" << endl;
+	cout << "----------------------" << endl<<endl;
 
-	for(int i = 1; i < 8; i++)
-		myGraph.addVertex(i);
+	for (unsigned int i = 0; i < cityVec.size(); i++)
+	{
+		cout << i << ". " << cityVec.at(i)<<endl;
+	}
 
-	myGraph.addEdge(1, 2, 2);
-	myGraph.addEdge(1, 4, 7);
-	myGraph.addEdge(2, 4, 3);
-	myGraph.addEdge(2, 5, 5);
-	myGraph.addEdge(3, 1, 2);
-	myGraph.addEdge(3, 6, 5);
-	myGraph.addEdge(4, 3, 1);
-	myGraph.addEdge(4, 5, 1);
-	myGraph.addEdge(4, 7, 4);
-	myGraph.addEdge(5, 7, 2);
-	myGraph.addEdge(6, 4, 3);
-	myGraph.addEdge(7, 6, 4);
+	choice = Nav(0, cityVec.size());
+	string nodeFile ="T05/" + cityVec.at(choice) + "/T05_nodes_X_Y_"+ cityVec.at(choice) + ".txt";
+	string edgeFile = "T05/" + cityVec.at(choice) + "/T05_edges_" + cityVec.at(choice) + ".txt";
+	string tagFile = "T05/" + cityVec.at(choice) + "/T05_tags_" + cityVec.at(choice) + ".txt";
+	cout<<nodeFile<<" "<< edgeFile<<" "<<tagFile<<" "<<endl;
 
-	// to force undirected graph...
-	myGraph.addEdge(2, 1, 2);
-	myGraph.addEdge(4, 1, 7);
-	myGraph.addEdge(4, 2, 3);
-	myGraph.addEdge(5, 2, 5);
-	myGraph.addEdge(1, 3, 2);
-	myGraph.addEdge(6, 3, 5);
-	myGraph.addEdge(3, 4, 1);
-	myGraph.addEdge(5, 4, 1);
-	myGraph.addEdge(7, 4, 4);
-	myGraph.addEdge(7, 5, 2);
-	myGraph.addEdge(4, 6, 3);
-	myGraph.addEdge(6, 7, 4);
+	//readNodeFile(nodeFile);
+	readFileEdge(edgeFile);
+}
 
-	return myGraph;
+void main_menu()
+{
+	cout << "----------------------" << endl;
+	cout << "|      MAIN MENU     |" << endl;
+	cout << "----------------------" << endl;
+	cout << "0. Choose a city" << endl;
+	cout << "1. Exit" << endl;
+
+	switch (Nav(0, 1))
+	{
+	case 0:
+		city_menu();
+		break;
+	case 1:
+		return;
+	default:
+		break;
+	}
 }
 
 int main()
 {
-	Graph<int> graph = createTestGraph();
+main_menu();
 
 	return 0;
 }

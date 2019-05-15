@@ -10,26 +10,66 @@
 
 using namespace std;
 
+class Node {
+	int id;
+	int x;
+	int y;
+	//int value;
+
+	public:
+
+	Node(int id, float x, float y) { this->id = id; this->x = x; this->y = y; }
+	int getId(){ return id;}
+	float getX(){return x;}
+	float getY(){return y;}
+	//int getValue(){return value;}
+
+	void setId(int id){this->id = id;}
+	void setX(float lat){this->x = lat;}
+	void setY(float lon){this->y = lon;}
+	//void setValue(int value){this->value = value;}
+
+	bool operator == (Node other) {
+		if (this->id == other.getId())
+			if (this->x == other.getX())
+				if (this->y == other.getY())
+					return true;
+		return false;
+	}
+
+	void operator = (Node other) {
+		this->id == other.getId();
+		this->x == other.getX();
+		this->y == other.getY();
+	}
+
+	double getDistance(Node other) {
+		return sqrt(pow(this->x - other.getX(), 2) + pow(this->y - other.getY(), 2));
+	}
+
+	
+};
+
 
 class School {
 	string name;
 	int morningTime;
 	int afternoonTime;
-	int x;
-	int y;
+	float x;
+	float y;
 
 public:
-	School(string name, int morningTime, int afternoonTime, int x, int y);
+	School(string name, int morningTime, int afternoonTime, float x, float y);
 	string getName();
 	void setName(string name);
 	int getMorningTime();
 	void setMorningTime(int time);
 	int getAfternoonTime();
 	void setAfternoonTime(int time);
-	int getX();
-	void setX(int x);
-	int getY();
-	void setY(int y);
+	float getX();
+	void setX(float x);
+	float getY();
+	void setY(float y);
 };
 
 class Student {
@@ -49,16 +89,16 @@ public:
 
 class BusStop {
 	vector<Student*> studentsInStop;
-	int x;
-	int y;
+	float x;
+	float y;
 
 public:
-	BusStop(int x, int y, vector<Student*> studentsInStop);
+	BusStop(float x, float y, vector<Student*> studentsInStop);
 	vector<Student*> getStudentsInStop();
-	int getX();
-	void setX(int x);
-	int getY();
-	void setY(int y);
+	float getX();
+	void setX(float x);
+	float getY();
+	void setY(float y);
 };
 
 class Bus {
@@ -91,13 +131,13 @@ class Garage {
 	int y;
 
 public:
-	Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo, int x, int y);
+	Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo, float x, float y);
 	vector<Bus*> getBusesInGarage();
 	vector<Bus*> getBusesToGo();
-	int getX();
-	void setX(int x);
-	int getY();
-	void setY(int y);
+	float getX();
+	void setX(float x);
+	float getY();
+	void setY(float y);
 };
 
 
