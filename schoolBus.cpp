@@ -2,13 +2,12 @@
 
 ////////////////SCHOOL/////////////////////////////////
 
-School::School(string name, int morningTime, int afternoonTime, float x, float y)
+School::School(string name, int morningTime, int afternoonTime, Node *node)
 {
 	this->name = name;
 	this->morningTime = morningTime;
 	this->afternoonTime = afternoonTime;
-	this->x = x;
-	this->y = y;
+	this->node = node;
 
 }
 
@@ -42,34 +41,13 @@ void School::setAfternoonTime(int time)
 	afternoonTime = time;
 }
 
-float School::getX()
-{
-	return x;
-}
-
-void School::setX(float x)
-{
-	this->x = x;
-}
-
-float School::getY()
-{
-	return y;
-}
-
-void School::setY(float y)
-{
-	this->y = y;
-}
-
-
 ////////////////STUDENT///////////////////////////////
 
-Student::Student(string name, int age, School* school)
+Student::Student(string name, int age)
 {
 	this->name = name;
 	this->age = age;
-	this->school = school;
+
 }
 
 string Student::getName()
@@ -92,44 +70,19 @@ void Student::setAge(int age)
 	this->age = age;
 }
 
-School* Student::getSchool()
-{
-	return school;
-}
-
-void Student::setSchool(School* school)
-{
-	this->school = school;
-}
 
 ///////////////BUSSTOP////////////////////////////////
 
-BusStop::BusStop(float x, float y, vector<Student*> studentsInStop)
+BusStop::BusStop(Node* node, string address)
 {
-	this->studentsInStop = studentsInStop;
-	this->x = x;
-	this->y = y;
+	this->node = node;
+	this->address = address;
 }
 vector<Student*> BusStop::getStudentsInStop()
 {
 	return studentsInStop;
 }
-float BusStop::getX()
-{
-	return x;
-}
-void BusStop::setX(float x)
-{
-	this->x = x;
-}
-float BusStop::getY()
-{
-	return y;
-}
-void BusStop::setY(float y)
-{
-	this->y = y;
-}
+
 //////////////BUS/////////////////////////////////////
 
 Bus::Bus(int busId, School* school, vector<Student*> busStudents, bool apt, int capacity, int occupation)
@@ -183,13 +136,12 @@ void Bus::setOccupation(int occupation)
 }
 //////////////GARAGE//////////////////////////////////
 
-Garage::Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo, float x, float y)
+Garage::Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo)
 {
 	this->numberOfBuses = numberOfBuses;
 	this->busesInGarage = busesInGarage;
 	this->busesToGo = busesToGo;
-	this->x = x;
-	this->y = y;
+
 }
 
 vector<Bus*> Garage::getBusesInGarage()
@@ -200,24 +152,4 @@ vector<Bus*> Garage::getBusesInGarage()
 vector<Bus*> Garage::getBusesToGo()
 {
 	return busesToGo;
-}
-
-float Garage::getX()
-{
-	return x;
-}
-
-void Garage::setX(float x)
-{
-	this->x = x;
-}
-
-float Garage::getY()
-{
-	return y;
-}
-
-void Garage::setY(float y)
-{
-	this->y = y;
 }
