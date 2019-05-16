@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include "Graph.h"
 
 using namespace std;
 
@@ -18,7 +20,7 @@ class Node {
 
 	public:
 	Node(int id, float x, float y) { this->id = id; this->x = x; this->y = y; }
-	int getId(){ return id;}
+	int getID(){ return id;}
 	float getX(){return x;}
 	float getY(){return y;}
 	//int getValue(){return value;}
@@ -29,7 +31,7 @@ class Node {
 	//void setValue(int value){this->value = value;}
 
 	bool operator == (Node other) {
-		if (this->id == other.getId())
+		if (this->id == other.getID())
 			if (this->x == other.getX())
 				if (this->y == other.getY())
 					return true;
@@ -37,9 +39,9 @@ class Node {
 	}
 
 	void operator = (Node other) {
-		this->id == other.getId();
-		this->x == other.getX();
-		this->y == other.getY();
+		this->id = other.getID();
+		this->x = other.getX();
+		this->y = other.getY();
 	}
 
 	double getDistance(Node other) {
@@ -53,18 +55,18 @@ class School {
 	string name;
 	int morningTime;
 	int afternoonTime;
-	Node* node; 
+	Vertex<Node> *node;
 
 public:
-	School(string name, int morningTime, int afternoonTime, Node *node);
+	School(string name, int morningTime, int afternoonTime, Vertex<Node> *node);
 	string getName();
 	void setName(string name);
 	int getMorningTime();
 	void setMorningTime(int time);
 	int getAfternoonTime();
 	void setAfternoonTime(int time);
-	void setNode(Node* node) { this->node = node; }
-	Node* getNode() { return node; }
+	void setNode(Vertex<Node>* node) { this->node = node; }
+	Vertex<Node>* getNode() { return node; }
 };
 
 class Student {
@@ -82,15 +84,15 @@ public:
 class BusStop {
 	vector<Student*> studentsInStop;
 	string address;
-	Node* node;
+	Vertex<Node> *node;
 
 public:
-	BusStop(Node* node,string address);
+	BusStop(Vertex<Node> *node,string address);
 	vector<Student*> getStudentsInStop();
 	string getAddress(){return address;}
 	void setAddress(string address){this->address = address;}
-	void setNode(Node* node) { this->node = node; }
-	Node* getNode() { return node; }
+	void setNode(Vertex<Node> *node) { this->node = node; }
+	Vertex<Node> * getNode() { return node; }
 };
 
 class Bus {

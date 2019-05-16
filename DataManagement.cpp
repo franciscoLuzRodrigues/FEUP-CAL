@@ -48,10 +48,13 @@ int DataManager::readNodeFile(string fileName)
 }
 
 Node getNode(int id, Graph<Node> &graph) {
+	Node node(-1,-1,-1);
 	for (auto v : graph.getVertexSet()) {
-		if (v->getInfo().getId() == id)
+		if (v->getInfo().getID() == id)
 			return (v->getInfo());
 	}
+
+	return node;
 }
 
 int DataManager::readEdgeFile(string fileName) {
@@ -112,9 +115,20 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		line.erase(0, line.find(',') + 2);
 		afternoonTime = stoi(line.substr(0, line.find(',')));
 		line.erase(0, line.find(',') + 2);
-		School newSchool = School(sName, morningTime, afternoonTime, &getNode(nodeID, graph));
+
+
+		for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
+		{
+			if(graph.getVertexSet().at(i)->getInfo().getID() == nodeID)
+			{
+				School newSchool = School(sName, morningTime, afternoonTime, graph.getVertexSet().at(i));
+				addSchool(newSchool);
+				break;
+			}
+		}
+
 		//sVec.push_back(&newSchool);
-		addSchool(newSchool);
+
 		//cout << sVec.at(0)->getName() << " " << morningTime << " " << afternoonTime << " "<< getNode(nodeID, graph).getId() << endl<<endl;
 
 	}
@@ -127,9 +141,19 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		line.erase(0, line.find(',') + 2);
 		BSaddress = line.substr(0, line.find(','));
 		cout << " " << line.substr(0, line.find(','));
-		BusStop newBS = BusStop(&getNode(nodeID, graph), BSaddress);
+
+		for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
+		{
+			if(graph.getVertexSet().at(i)->getInfo().getID() == nodeID)
+			{
+				BusStop newBS = BusStop(graph.getVertexSet().at(i), BSaddress);
+				//bVec.push_back(&newBS);
+				addBusStop(newBS);
+				break;
+			}
+
+		}
 		//bVec.push_back(&newBS);
-		addBusStop(newBS);
 		//cout << " " << getNode(nodeID, graph).getId() <<" "<<BSaddress<< endl;
 	}
 	return 0;

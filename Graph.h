@@ -127,6 +127,7 @@ public:
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
+	vector<Vertex<T> *> getVertexSet(){return vertexSet;}
 
 	~Graph();
 

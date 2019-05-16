@@ -2,7 +2,7 @@
 
 ////////////////SCHOOL/////////////////////////////////
 
-School::School(string name, int morningTime, int afternoonTime, Node *node)
+School::School(string name, int morningTime, int afternoonTime, Vertex<Node> *node)
 {
 	this->name = name;
 	this->morningTime = morningTime;
@@ -73,7 +73,7 @@ void Student::setAge(int age)
 
 ///////////////BUSSTOP////////////////////////////////
 
-BusStop::BusStop(Node* node, string address)
+BusStop::BusStop(Vertex<Node> *node, string address)
 {
 	this->node = node;
 	this->address = address;
