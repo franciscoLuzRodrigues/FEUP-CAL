@@ -22,10 +22,11 @@ class DataManager{
 
         //Garage garage;
 
-    protected:
-    Graph<Node> graph;
+    //protected:
+    //Graph<Node> graph;
 
     public:
+    	Graph<Node> graph;
 		DataManager() {}
 		int readNodeFile(string fileName);
 		int readEdgeFile(string fileName);
@@ -36,7 +37,8 @@ class DataManager{
 		vector<School > getSchools() {return schools; }
 		vector<BusStop > getBusStops() {return busStops; }
 		vector<Student > getStudents() {return students; }
-
+		vector<Node> getPath(Node garage, Node school, vector<Node> busStops);
+		int getPathDistance(vector<Node> path);
 };
 
 #endif /* DATA_MANAGEMENT_H_ */

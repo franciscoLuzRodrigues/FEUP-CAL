@@ -158,3 +158,52 @@ int DataManager::loadPointsOfInterest(string fileName) {
 	}
 	return 0;
 }
+
+vector<Node> DataManager::getPath(Node garage, Node school, vector<Node> busStops){
+	vector<Node> path;
+
+	if(busStops.size() == 0){
+		graph.dijkstraShortestPath(garage);
+		path = graph.getPath(garage,school);
+		return path;
+	}
+
+	vector<Node> test = busStops;
+	Node init = garage;
+	int distance = INF;
+	int size = busStops.size();
+
+	graph.dijkstraShortestPath(garage);
+
+	while(size-- > 0){
+		int index;
+		for(int i = 0; i < test.size(); i++){
+			test = graph.getPath(garage,busStops.at(i));
+			int newDist = getPathDistance(test);
+			if(newDist < distance){
+				distance = newDist;
+				init = busStops[i];
+				index = i;
+			}
+		}
+		path.push_back(init);
+		test.erase(test.begin()+index);
+	}
+
+	return path;
+}
+
+int DataManager::getPathDistance(vector<Node> path){
+	int distance = 0;
+
+	for(int i = 0; i < path.size()-1; i++){
+		auto v1 = graph.findVertex(path[i]);
+		auto v2 = graph.findVertex(path[i+1]);
+
+		Edge<Node> e1 = v1->findEdge(v2->getInfo());
+
+		distance += e1.getWeight();
+	}
+
+	return distance;
+}

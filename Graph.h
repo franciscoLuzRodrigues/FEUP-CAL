@@ -39,6 +39,8 @@ public:
 	T getInfo() const;
 	double getDist() const;
 	Vertex *getPath() const;
+	vector<Edge<T> > getAdj(){ return adj; }
+	Edge<T> findEdge(const T &e);
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
 };
@@ -76,6 +78,14 @@ Vertex<T> *Vertex<T>::getPath() const {
 	return this->path;
 }
 
+template <class T>
+Edge<T> Vertex<T>::findEdge(const T & node){
+	for(auto edge : getAdj()){
+		if(edge.getDst().getInfo() == node)
+			return edge;
+	}
+}
+
 /********************** Edge  ****************************/
 
 template <class T>
@@ -93,6 +103,7 @@ public:
 
 	// Fp07
 	double getWeight() const;
+	Vertex<T> getDst(){ return *dest; }
 };
 
 template <class T>
