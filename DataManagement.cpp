@@ -160,35 +160,52 @@ int DataManager::loadPointsOfInterest(string fileName) {
 }
 
 vector<Node> DataManager::getPath(Node garage, Node school, vector<Node> busStops){
+
+	cout << "Garage " << garage.getID() << endl;
+	cout << "School " << school.getID() << endl;
+
 	vector<Node> path;
 
 	if(busStops.size() == 0){
+		cout << "No stops" << endl;
 		graph.dijkstraShortestPath(garage);
 		path = graph.getPath(garage,school);
 		return path;
 	}
 
-	vector<Node> test = busStops;
+	vector<Node> test;
+	vector<Node> temp = busStops;
+	vector<Node> subPath;
 	Node init = garage;
 	int distance = INF;
 	int size = busStops.size();
 
-	graph.dijkstraShortestPath(garage);
+	path.push_back(garage);
 
 	while(size-- > 0){
+		cout << "Size = " << size << endl;
 		int index;
-		for(int i = 0; i < test.size(); i++){
-			test = graph.getPath(garage,busStops.at(i));
+		init = path.at(path.size()-1);
+		graph.dijkstraShortestPath(init);
+		for(int i = 0; i < temp.size(); i++){
+			test = graph.getPath(init,busStops.at(i));
+			cout << "Test size = " << test.size() << endl;
 			int newDist = getPathDistance(test);
-			if(newDist < distance){
+			cout << "New dist = " << newDist << endl;
+			if(newDist < distance && test.size() != 0){
 				distance = newDist;
-				init = busStops[i];
+				subPath = test;
 				index = i;
 			}
 		}
-		path.push_back(init);
-		test.erase(test.begin()+index);
+ 		subPath.erase(subPath.begin());
+ 		path.insert(path.end(),subPath.begin(),subPath.end());
+		temp.erase(temp.begin()+index);
 	}
+
+	for(int i = 0; i < path.size(); i++) cout << path.at(i).getID() << " |<- ";
+
+	cout << endl;
 
 	return path;
 }
@@ -196,7 +213,7 @@ vector<Node> DataManager::getPath(Node garage, Node school, vector<Node> busStop
 int DataManager::getPathDistance(vector<Node> path){
 	int distance = 0;
 
-	for(int i = 0; i < path.size()-1; i++){
+	for(int i = 0; i < path.size()-1 && path.size() > 0; i++){
 		auto v1 = graph.findVertex(path[i]);
 		auto v2 = graph.findVertex(path[i+1]);
 
@@ -204,6 +221,5 @@ int DataManager::getPathDistance(vector<Node> path){
 
 		distance += e1.getWeight();
 	}
-
 	return distance;
 }

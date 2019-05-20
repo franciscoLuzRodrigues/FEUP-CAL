@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <fstream>
 
 #include "Graph.h"
 #include "SchoolBus.h"
 #include "DataManagement.h"
+#include "graphviewer.h"
 #include <string>
 
 using namespace std;
@@ -113,6 +115,19 @@ void schoolChoice_menu()
 	{
 		main_menu();
 	}
+
+	Node school = dataMan.getSchools().at(choice).getNode()->getInfo();
+
+	vector<Node> busStops;
+
+	for(int i = 1; i < dataMan.getBusStops().size(); i++){
+		Node node = dataMan.getBusStops().at(i).getNode()->getInfo();
+		busStops.push_back(node);
+	}
+
+	Node garage = dataMan.getBusStops().at(0).getNode()->getInfo();
+
+	dataMan.getPath(garage,school,busStops);
 }
 void city_menu()
 {
@@ -139,9 +154,49 @@ void city_menu()
 	string tagFile = "T05/" + cityVec.at(choice) + "/T05_tags_" + cityVec.at(choice) + ".txt";
 	cout<<nodeFile<<" "<< edgeFile<<" "<<tagFile<<" "<<endl;
 
-	dataMan.readEdgeFile(edgeFile);
 	dataMan.readNodeFile(nodeFile);
+	dataMan.readEdgeFile(edgeFile);
+	/*GraphViewer gv = GraphViewer(1000,1000,false);
+		gv.createWindow(1000,1000);
+
+		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
+			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+			int r = 8000;
+			x =  x%r;
+			y =  y%r;
+			cout << "X = " << x << " Y = " << y << endl;
+			gv.addNode(idNo, x, y);
+		}
+
+		cout << "Sai" << endl;
+		int idA = 0;
+
+		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
+			int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+
+			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(i)->getAdj();
+
+			for(int j = 0; j < adj.size(); j++){
+				int idNo2 = adj.at(j).getDst().getInfo().getID();
+
+
+				gv.addEdge(idA++, idNo1, idNo2, EdgeType::DIRECTED);
+			}
+		}
+
+
+		gv.rearrange();
+
+		char a;
+		cin >> a;
+
+		gv.closeWindow();*/
+
 	dataMan.loadPointsOfInterest(tagFile);
+	cout << endl;
+	cout << "Passa 3" << endl;
 
 	schoolChoice_menu();
 }
@@ -176,7 +231,6 @@ void main_menu()
 
 int main()
 {
-main_menu();
-
+	main_menu();
 	return 0;
 }

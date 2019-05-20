@@ -266,6 +266,8 @@ vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
 	for ( ; v != nullptr; v = v->path)
 		res.push_back(v->info);
 	reverse(res.begin(), res.end());
+
+	cout << "Res size = " << res.size() << endl;
 	return res;
 }
 /*
