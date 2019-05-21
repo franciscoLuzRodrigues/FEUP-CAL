@@ -11,7 +11,7 @@
 
 using namespace std;
 
-vector<string> cityVec = {"Aveiro", "Braga", "Coimbra", "Ermesinde", "Fafe", "Gondomar", "Lisboa", "Maia", "Porto", "Viseu"};
+vector<string> cityVec = {"Aveiro", "Braga", "Coimbra", "Ermesinde", "Fafe", "Gondomar", "Lisboa", "Maia", "Porto", "Viseu", "MapTest1"};
 DataManager dataMan;
 void main_menu();
 
@@ -156,14 +156,14 @@ void city_menu()
 
 	dataMan.readNodeFile(nodeFile);
 	dataMan.readEdgeFile(edgeFile);
-	/*GraphViewer gv = GraphViewer(1000,1000,false);
-		gv.createWindow(1000,1000);
+	GraphViewer gv = GraphViewer(1000,1000,false);
+		gv.createWindow(100,100);
 
 		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
 			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
 			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
 			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-			int r = 8000;
+			int r = 100;
 			x =  x%r;
 			y =  y%r;
 			cout << "X = " << x << " Y = " << y << endl;
@@ -192,7 +192,7 @@ void city_menu()
 		char a;
 		cin >> a;
 
-		gv.closeWindow();*/
+		gv.closeWindow();
 
 	dataMan.loadPointsOfInterest(tagFile);
 	cout << endl;

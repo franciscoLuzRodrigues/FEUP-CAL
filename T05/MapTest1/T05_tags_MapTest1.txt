@@ -1,0 +1,9 @@
+school
+14, Escola1, 8, 15
+house
+1, Casa 1
+2, Casa 2
+5, Casa 3
+8, Casa 4
+9, Casa 5
+14, Casa 6
