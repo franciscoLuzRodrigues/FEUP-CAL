@@ -118,6 +118,12 @@ void schoolChoice_menu()
 
 }
 
+bool isInPath(vector<Node> path, int ID1, int ID2){
+	for(int i = 0; i < path.size()-1; i++){
+		if(path.at(i).getID() == ID1 && path.at(i+1).getID() == ID2) return true;
+	}
+	return false;
+}
 
 
 
@@ -134,17 +140,27 @@ void drawResult(vector<Node> path){
 
 		for(int i = 0; i < path.size(); i++){
 			int idNo = path.at(i).getID();
-			int x = path.at(i).getX();
-			int y = path.at(i).getY();
+			//int x = path.at(i).getX();
+			//int y = path.at(i).getY();
 			gv.setVertexColor(idNo,BLUE);
 		}
 
-		for(int i = 0; i < path.size()-1; i++){
-			int idNo1 = path.at(i).getID();
-			int idNo2 = path.at(i+1).getID();
-			gv.addEdge(i, idNo1, idNo2, EdgeType::DIRECTED);
-		}
+		int idA = 0;
 
+				for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
+					int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+
+					vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(i)->getAdj();
+
+					for(int j = 0; j < adj.size(); j++){
+						int idNo2 = adj.at(j).getDst().getInfo().getID();
+						gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
+						if(isInPath(path,idNo1,idNo2)){
+							gv.setEdgeColor(idA,ORANGE);
+						}
+						idA++;
+					}
+				}
 
 		gv.rearrange();
 
@@ -186,6 +202,9 @@ void city_menu()
 	dataMan.loadPointsOfInterest(tagFile);
 
 	dataMan.getPath(dataMan.getSchools().at(0).getNode()->getInfo(),dataMan.getSchools().at(1).getNode()->getInfo());
+
+
+	//drawResult(path);
 
 	schoolChoice_menu();
 }
