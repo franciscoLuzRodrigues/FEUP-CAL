@@ -9,8 +9,10 @@
 #include <iostream>
 #include <fstream>
 
+
 #include "SchoolBus.h"
 #include "Graph.h"
+
 
 using namespace std;
 
@@ -19,6 +21,10 @@ class DataManager{
         vector<School > schools; //Point of interest
         vector<BusStop > busStops; //Point of interest
         vector<Student > students; 
+        MutablePriorityQueue<Vertex<Node>> nearestV;
+
+
+
 
         //Garage garage;
 
@@ -37,8 +43,12 @@ class DataManager{
 		vector<School > getSchools() {return schools; }
 		vector<BusStop > getBusStops() {return busStops; }
 		vector<Student > getStudents() {return students; }
-		vector<Node> getPath(Node garage, Node school, vector<Node> busStops);
+		vector<Node> getPathNodes(Node garage, Node school);
 		int getPathDistance(vector<Node> path);
+		vector<Node> getPath(Node garage, Node school);
+		void updateQ();
+		void eraseNodeWithID(int id);
+
 };
 
 #endif /* DATA_MANAGEMENT_H_ */

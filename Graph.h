@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include "MutablePriorityQueue.h"
+#include <queue>
 
 using namespace std;
 
@@ -43,6 +44,7 @@ public:
 	Edge<T> findEdge(const T &e);
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
+
 };
 
 
@@ -261,13 +263,15 @@ template<class T>
 vector<T> Graph<T>::getPath(const T &origin, const T &dest) const{
 	vector<T> res;
 	auto v = findVertex(dest);
-	if (v == nullptr || v->dist == INF) // missing or disconnected
+	if (v == nullptr || v->dist == INF){ // missing or disconnected
+		if(v == nullptr) cout << "NULL" << endl;
+		if(v->dist == INF) cout << "INF" << endl;
 		return res;
+	}
 	for ( ; v != nullptr; v = v->path)
 		res.push_back(v->info);
 	reverse(res.begin(), res.end());
 
-	cout << "Res size = " << res.size() << endl;
 	return res;
 }
 /*

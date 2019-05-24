@@ -30,6 +30,7 @@ class Node {
 	void setY(float lon){this->y = lon;}
 	//void setValue(int value){this->value = value;}
 
+
 	bool operator == (Node other) {
 		if (this->id == other.getID())
 			if (this->x == other.getX())

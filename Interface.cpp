@@ -116,19 +116,45 @@ void schoolChoice_menu()
 		main_menu();
 	}
 
-	Node school = dataMan.getSchools().at(choice).getNode()->getInfo();
-
-	vector<Node> busStops;
-
-	for(int i = 1; i < dataMan.getBusStops().size(); i++){
-		Node node = dataMan.getBusStops().at(i).getNode()->getInfo();
-		busStops.push_back(node);
-	}
-
-	Node garage = dataMan.getBusStops().at(0).getNode()->getInfo();
-
-	dataMan.getPath(garage,school,busStops);
 }
+
+
+
+
+void drawResult(vector<Node> path){
+	GraphViewer gv = GraphViewer(1000,1000,false);
+		gv.createWindow(1000,1000);
+
+		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
+			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+			gv.addNode(idNo, x, y);
+		}
+
+		for(int i = 0; i < path.size(); i++){
+			int idNo = path.at(i).getID();
+			int x = path.at(i).getX();
+			int y = path.at(i).getY();
+			gv.setVertexColor(idNo,BLUE);
+		}
+
+		for(int i = 0; i < path.size()-1; i++){
+			int idNo1 = path.at(i).getID();
+			int idNo2 = path.at(i+1).getID();
+			gv.addEdge(i, idNo1, idNo2, EdgeType::DIRECTED);
+		}
+
+
+		gv.rearrange();
+
+		char a;
+		cin >> a;
+
+		gv.closeWindow();
+}
+
+
 void city_menu()
 {
 	int choice;
@@ -156,47 +182,10 @@ void city_menu()
 
 	dataMan.readNodeFile(nodeFile);
 	dataMan.readEdgeFile(edgeFile);
-	GraphViewer gv = GraphViewer(1000,1000,false);
-		gv.createWindow(100,100);
-
-		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
-			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-			int r = 100;
-			x =  x%r;
-			y =  y%r;
-			cout << "X = " << x << " Y = " << y << endl;
-			gv.addNode(idNo, x, y);
-		}
-
-		cout << "Sai" << endl;
-		int idA = 0;
-
-		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
-			int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-
-			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(i)->getAdj();
-
-			for(int j = 0; j < adj.size(); j++){
-				int idNo2 = adj.at(j).getDst().getInfo().getID();
-
-
-				gv.addEdge(idA++, idNo1, idNo2, EdgeType::DIRECTED);
-			}
-		}
-
-
-		gv.rearrange();
-
-		char a;
-		cin >> a;
-
-		gv.closeWindow();
 
 	dataMan.loadPointsOfInterest(tagFile);
-	cout << endl;
-	cout << "Passa 3" << endl;
+
+	dataMan.getPath(dataMan.getSchools().at(0).getNode()->getInfo(),dataMan.getSchools().at(1).getNode()->getInfo());
 
 	schoolChoice_menu();
 }

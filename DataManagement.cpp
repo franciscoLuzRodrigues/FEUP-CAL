@@ -127,99 +127,110 @@ int DataManager::loadPointsOfInterest(string fileName) {
 			}
 		}
 
-		//sVec.push_back(&newSchool);
-
-		//cout << sVec.at(0)->getName() << " " << morningTime << " " << afternoonTime << " "<< getNode(nodeID, graph).getId() << endl<<endl;
-
 	}
 
 	while (!poiFile.eof())
 	{
 		getline(poiFile, line);
 		nodeID = stoi(line.substr(0, line.find(',')));
-		cout << " " << stoi(line.substr(0, line.find(',')));
 		line.erase(0, line.find(',') + 2);
 		BSaddress = line.substr(0, line.find(','));
-		cout << " " << line.substr(0, line.find(','));
 
 		for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
 		{
 			if(graph.getVertexSet().at(i)->getInfo().getID() == nodeID)
 			{
 				BusStop newBS = BusStop(graph.getVertexSet().at(i), BSaddress);
-				//bVec.push_back(&newBS);
 				addBusStop(newBS);
 				break;
 			}
 
 		}
-		//bVec.push_back(&newBS);
-		//cout << " " << getNode(nodeID, graph).getId() <<" "<<BSaddress<< endl;
+
 	}
 	return 0;
 }
 
-vector<Node> DataManager::getPath(Node garage, Node school, vector<Node> busStops){
+void DataManager::updateQ(){
+	while(!nearestV.empty())
+	{
+		nearestV.extractMin();
+	}
 
-	cout << "Garage " << garage.getID() << endl;
-	cout << "School " << school.getID() << endl;
+	for(unsigned int i = 0; i < busStops.size(); i++){
+				Vertex<Node>*v = graph.findVertex(busStops.at(i).getNode()->getInfo());
+				nearestV.insert(v);
 
+		}
+}
+
+void DataManager::eraseNodeWithID(int id){
+	for(unsigned int i = 0; i < busStops.size(); i++){
+		if(busStops.at(i).getNode()->getInfo().getID() == id){
+			busStops.erase(busStops.begin()+i);
+			return;
+		}
+	}
+}
+
+
+
+
+vector<Node> DataManager::getPathNodes(Node garage, Node school){
+	Vertex<Node> nearV(*new Node(-1,-1,-1));
 	vector<Node> path;
 
-	if(busStops.size() == 0){
-		cout << "No stops" << endl;
-		graph.dijkstraShortestPath(garage);
-		path = graph.getPath(garage,school);
-		return path;
-	}
+    graph.dijkstraShortestPath(garage);
+    updateQ();
 
-	vector<Node> test;
-	vector<Node> temp = busStops;
-	vector<Node> subPath;
-	Node init = garage;
-	int distance = INF;
-	int size = busStops.size();
-
+    nearV = *nearestV.extractMin();
 	path.push_back(garage);
-
-	while(size-- > 0){
-		cout << "Size = " << size << endl;
-		int index;
-		init = path.at(path.size()-1);
-		graph.dijkstraShortestPath(init);
-		for(int i = 0; i < temp.size(); i++){
-			test = graph.getPath(init,busStops.at(i));
-			cout << "Test size = " << test.size() << endl;
-			int newDist = getPathDistance(test);
-			cout << "New dist = " << newDist << endl;
-			if(newDist < distance && test.size() != 0){
-				distance = newDist;
-				subPath = test;
-				index = i;
-			}
-		}
- 		subPath.erase(subPath.begin());
- 		path.insert(path.end(),subPath.begin(),subPath.end());
-		temp.erase(temp.begin()+index);
+	path.push_back(nearV.getInfo());
+	unsigned int BSsize = busStops.size()+1;
+	while(path.size() != BSsize){
+		eraseNodeWithID(nearV.getInfo().getID());
+		graph.dijkstraShortestPath(nearV.getInfo());
+		updateQ();
+		nearV = *nearestV.extractMin();
+		path.push_back(nearV.getInfo());
 	}
 
-	for(int i = 0; i < path.size(); i++) cout << path.at(i).getID() << " |<- ";
-
-	cout << endl;
+	path.push_back(school);
 
 	return path;
+
+}
+
+
+vector<Node> DataManager::getPath(Node garage, Node school){
+
+	vector<Node> temp, pathNode, finalPath;
+
+	pathNode = getPathNodes(garage, school);
+	for(unsigned int i = 0 ; i < pathNode.size(); i++){
+		cout << "ID: "<< pathNode.at(i).getID()<<endl;
+	}
+
+	finalPath.push_back(garage);
+	for(unsigned int j = 0; j < pathNode.size() -1; j++)
+	{
+		graph.dijkstraShortestPath(pathNode.at(j));
+		temp = graph.getPath(pathNode.at(j), pathNode.at(j+1));
+
+		for(unsigned int i = 1;i < temp.size(); i++){
+			finalPath.push_back(temp.at(i));
+			cout<<"temp "<<temp.at(i).getID();
+		}
+		cout<<endl;
+	}
+
+	return finalPath;
+
+
 }
 
 int DataManager::getPathDistance(vector<Node> path){
-	int distance = 0;
 
-	for(int i = 0; i < path.size()-1 && path.size() > 0; i++){
-		auto v1 = graph.findVertex(path[i]);
-		auto v2 = graph.findVertex(path[i+1]);
-
-		Edge<Node> e1 = v1->findEdge(v2->getInfo());
-
-		distance += e1.getWeight();
-	}
-	return distance;
+	Vertex<Node> *v = graph.findVertex(path.at(path.size()-1));
+	return v->getDist();
 }
