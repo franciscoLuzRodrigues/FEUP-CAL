@@ -71,6 +71,15 @@ void Student::setAge(int age)
 }
 
 
+void Student::getInfo()
+{
+	cout<<endl;
+	cout << "------------------------" << endl;
+	cout << "|Name: "<< name       << endl;
+	cout << "|Age: "<< age      << endl;
+}
+
+
 ///////////////BUSSTOP////////////////////////////////
 
 BusStop::BusStop(Vertex<Node> *node, string address)
@@ -85,11 +94,9 @@ vector<Student*> BusStop::getStudentsInStop()
 
 //////////////BUS/////////////////////////////////////
 
-Bus::Bus(int busId, School* school, vector<Student*> busStudents, bool apt, int capacity, int occupation)
+Bus::Bus(int busId, bool apt, int capacity, int occupation)
 {
-	this->busId = busId;
-	this->school = school;
-	this->busStudents = busStudents;
+	this->busId = busId;;
 	this->apt = apt;
 	this->capacity = capacity;
 	this->occupation = occupation;
@@ -102,14 +109,7 @@ void Bus::setBusId()
 {
 	this->busId = busId;
 }
-School * Bus::getSchool()
-{
-	return school;
-}
-void Bus::setSchool(School * school)
-{
-	this->school = school;
-}
+
 bool Bus::getApt()
 {
 	return apt;
@@ -136,20 +136,10 @@ void Bus::setOccupation(int occupation)
 }
 //////////////GARAGE//////////////////////////////////
 
-Garage::Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo)
+Garage::Garage(vector<Bus*> busesInGarage, int numberOfBuses, Vertex<Node> *node)
 {
+	companyVehicles = busesInGarage;
 	this->numberOfBuses = numberOfBuses;
-	this->busesInGarage = busesInGarage;
-	this->busesToGo = busesToGo;
-
+	this->node = node;
 }
 
-vector<Bus*> Garage::getBusesInGarage()
-{
-	return busesInGarage;
-}
-
-vector<Bus*> Garage::getBusesToGo()
-{
-	return busesToGo;
-}

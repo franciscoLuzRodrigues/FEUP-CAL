@@ -32,6 +32,116 @@ int Nav(int bottom, int top)
 	return key;
 }
 
+void showStudents()
+{
+	int choice;
+	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
+	{
+		cout << i << ". " << dataMan.getStudents().at(i).getName() << endl;
+	}
+
+	cout << dataMan.getStudents().size() << ". Exit" << endl;
+	choice = Nav(0, dataMan.getStudents().size());
+	
+	if (choice == dataMan.getStudents().size())
+	{
+		main_menu();
+	}
+
+	dataMan.getStudents().at(choice).getInfo();
+	dataMan.printStudentAddress(dataMan.getStudents().at(choice).getName());
+}
+
+void removeStudent()
+{
+	string name;
+	cout<<"What's the Student's name? "<<endl;
+	cin>>name;
+	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
+	{
+		if(dataMan.getStudents().at(i).getName() == name)
+		{
+			dataMan.eraseStudent(i);
+			break;
+		}	
+	}
+	
+	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
+	{
+		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop().size();
+		for(unsigned int j=0; j< studentSize; j++)
+		{
+			Student studentInStop =*dataMan.getBusStops()->at(i).getStudentsInStop().at(j);
+			if(studentInStop.getName() == name)
+			{
+				if(studentSize > 1)
+				{
+					dataMan.getBusStops()->at(i).eraseStudentInStop(j);
+				}
+				else
+				{
+					dataMan.eraseBusStop(i);
+				}
+			}
+		}
+	}
+}
+void addStudent()
+{
+	Student s = Student("", 0);
+	int choice;
+	string name;
+	int age;
+	bool found = false;
+
+	cout << "Student's Name" << endl;
+	cin >> name;
+	cout << "Student's age" << endl;
+	cin >> age;
+	cout<<"What's the best busStop?"<<endl;
+
+	for (unsigned int i = 0; i < dataMan.getAllBusStops()->size(); i++)
+	{
+		cout << i << ". " << dataMan.getAllBusStops()->at(i).getAddress() << endl;
+	}
+
+	cout << dataMan.getAllBusStops()->size() << ". Exit" << endl;
+	choice = Nav(0, dataMan.getAllBusStops()->size());
+
+	if (choice == dataMan.getAllBusStops()->size())
+	{
+		main_menu();
+	}
+	s.setAge(age);
+	s.setName(name);
+	dataMan.addStudent(s);
+	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
+	{
+		if(dataMan.getBusStops()->at(i).getNode()->getInfo().getID() == dataMan.getAllBusStops()->at(choice).getNode()->getInfo().getID())
+		{
+			dataMan.increaseStudent(&s,i);
+			found = true;
+			break;  
+			
+		}
+			
+
+	}
+	if(!found)
+	{
+		cout<< "\nHere"<< endl;
+		dataMan.getAllBusStops()->at(choice).addStudentInStop(&s);
+		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop().size()<<endl;
+		dataMan.addBusStop(dataMan.getAllBusStops()->at(choice));
+
+	}
+	
+	for(int i = 0; i < dataMan.getBusStops()->size(); i++){
+		cout <<i<< ". "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<< endl;
+	}
+
+
+}
 void vehicle_menu()
 {
 	int choice;
@@ -41,7 +151,8 @@ void vehicle_menu()
 	cout << "----------------------" << endl << endl;
 	cout << "0. Remove Vehicles" << endl;
 	cout << "1. Add Vehicle" << endl;
-	cout << "2. Exit" << endl;
+	cout << "2. show all Vehicles" << endl;
+	cout << "3. Exit" << endl;
 
 	switch (Nav(0, 2))
 	{
@@ -57,65 +168,38 @@ void vehicle_menu()
 	default:
 		break;
 	}
+
+	main_menu();
 }
 
 void student_menu()
 {
-	int choice;
-	string name;
-	int age;
-
-
 	cout << "----------------------" << endl;
 	cout << "|      STUDENTS       |" << endl;
 	cout << "----------------------" << endl << endl;
-	cout << "0. Remove Student" << endl;
-	cout << "1. Add Student" << endl;
-	cout << "2. Exit" << endl;
+	cout << "0. Add Student" << endl;
+	cout << "1. Remove Student" << endl;
+	cout << "2. Show students" << endl;
+	cout << "3. Exit" << endl;
 
-	Student s = Student("", 0);
 	switch (Nav(0, 2))
 	{
 	case 0:
-
+		addStudent();
 		break;
 	case 1:
-		cout << "Digite o nome" << endl;
-		cin >> name;
-		cout << "Digite a idade" << endl;
-		cin >> age;
-		s.setAge(age);
-		s.setName(name);
-		dataMan.addStudent(s);
+		removeStudent();
 		break;
 	case 2:
+		showStudents();
+		break;
+	case 3:
 		main_menu();
 		break;
 	default:
 		break;
 	}
-}
-
-void schoolChoice_menu()
-{
-	int choice;
-	cout << "----------------------" << endl;
-	cout << "|    Which School?   |" << endl;
-	cout << "----------------------" << endl << endl;
-
-	for (unsigned int i = 0; i < dataMan.getSchools().size(); i++)
-	{
-		cout << i << ". " << dataMan.getSchools().at(i).getName() << endl;
-	}
-
-	cout << dataMan.getSchools().size() << ". Exit" << endl;
-	choice = Nav(0, dataMan.getSchools().size());
-
-	if (choice == dataMan.getSchools().size())
-	{
-		main_menu();
-	}
-
+	main_menu();
 }
 
 bool isInPath(vector<Node> path, int ID1, int ID2){
@@ -124,8 +208,6 @@ bool isInPath(vector<Node> path, int ID1, int ID2){
 	}
 	return false;
 }
-
-
 
 void drawResult(vector<Node> path){
 	GraphViewer gv = GraphViewer(1000,1000,false);
@@ -140,8 +222,6 @@ void drawResult(vector<Node> path){
 
 		for(int i = 0; i < path.size(); i++){
 			int idNo = path.at(i).getID();
-			//int x = path.at(i).getX();
-			//int y = path.at(i).getY();
 			gv.setVertexColor(idNo,BLUE);
 		}
 
@@ -171,6 +251,82 @@ void drawResult(vector<Node> path){
 }
 
 
+void schoolChoice_menu()
+{
+	int choice;
+	cout << "----------------------" << endl;
+	cout << "|    Which School?   |" << endl;
+	cout << "----------------------" << endl << endl;
+
+	for (unsigned int i = 0; i < dataMan.getSchools().size(); i++)
+	{
+		cout << i << ". " << dataMan.getSchools().at(i).getName() << endl;
+	}
+
+	cout << dataMan.getSchools().size() << ". Exit" << endl;
+	choice = Nav(0, dataMan.getSchools().size());
+
+	if (choice == dataMan.getSchools().size())
+	{
+		main_menu();
+	}
+
+	cout<<"School choice: "<< dataMan.getSchools().at(choice).getName()<<endl;
+
+	dataMan.setSchool(dataMan.getSchools().at(choice));
+
+
+		Bus bus(1,1,5,0);
+		vector<Bus*> buses;
+		buses.push_back(&bus);
+		Garage garage(buses,1,dataMan.getSchools().at(choice+1).getNode());
+		dataMan.setGarage(&garage);
+		vector<vector<Node>> p = dataMan.getPath();
+		drawResult(p.at(0));
+
+
+}
+
+
+
+
+void drawGraph()
+{
+	GraphViewer gv = GraphViewer(1000, 1000, false);
+	gv.createWindow(1000, 1000);
+
+	for (int i = 0; i < dataMan.graph.getNumVertex(); i++)
+	{
+		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+		gv.addNode(idNo, x, y);
+	}
+
+	int idA = 0;
+
+	for (int i = 0; i < dataMan.graph.getNumVertex(); i++)
+	{
+		int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+
+		vector<Edge<Node>> adj = dataMan.graph.getVertexSet().at(i)->getAdj();
+
+		for (int j = 0; j < adj.size(); j++)
+		{
+			int idNo2 = adj.at(j).getDst().getInfo().getID();
+			gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
+			idA++;
+		}
+	}
+
+	gv.rearrange();
+
+	char a;
+	cin >> a;
+
+	gv.closeWindow();
+}
+
 void city_menu()
 {
 	int choice;
@@ -188,7 +344,7 @@ void city_menu()
 
 	if (choice == cityVec.size())
 	{
-		main_menu();
+		return;
 	}
 
 	string nodeFile ="T05/" + cityVec.at(choice) + "/T05_nodes_X_Y_"+ cityVec.at(choice) + ".txt";
@@ -201,12 +357,15 @@ void city_menu()
 
 	dataMan.loadPointsOfInterest(tagFile);
 
-	dataMan.getPath(dataMan.getSchools().at(0).getNode()->getInfo(),dataMan.getSchools().at(1).getNode()->getInfo());
 
+/*
+	vector<Node> p1;
+	for(int i = 0; i< dataMan.graph.getVertexSet().size(); i++){
+		p1.push_back(dataMan.graph.getVertexSet().at(i)->getInfo());
+	}
+	drawGraph();*/
 
-	//drawResult(path);
-
-	schoolChoice_menu();
+	main_menu();
 }
 
 void main_menu()
@@ -214,7 +373,7 @@ void main_menu()
 	cout << "----------------------" << endl;
 	cout << "|      MAIN MENU     |" << endl;
 	cout << "----------------------" << endl;
-	cout << "0. Choose a city" << endl;
+	cout << "0. Show path" << endl;
 	cout << "1. Vehicle Menu" << endl;
 	cout << "2. Student Menu" << endl;
 	cout << "3. Exit" << endl;
@@ -222,7 +381,7 @@ void main_menu()
 	switch (Nav(0, 3))
 	{
 	case 0:
-		city_menu();
+		schoolChoice_menu();
 		break;
 	case 1:
 		vehicle_menu();
@@ -239,6 +398,6 @@ void main_menu()
 
 int main()
 {
-	main_menu();
+	city_menu();
 	return 0;
 }

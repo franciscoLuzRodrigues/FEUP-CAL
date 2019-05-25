@@ -1,25 +1,6 @@
 school
-403628172, Escola C+S João Afonso de Aveiro, 8, 15
-1272158093, AEVA - Escola Profissional de Aveiro, 9, 17
-457553806, José Estêvão Secondary School, 8, 17
-701089656, Escola Secundaria Homem Cristo, 10, 18
-1110673687, Escola Básica Da Vera Cruz, 8, 16
-404737176, MUSA - Escola de Música e Artes de Aveiro, 9, 18
+1, Escola C+S João Afonso de Aveiro, 8, 15
+6, AEVA - Escola Profissional de Aveiro, 9, 17
 house
-998240512, Rua Luis Bráz Abreu
-503706240, Rua da Liberdade
-26020356, Rua de Aquilino Ribeiro
-534789258, Rua Jaime Cortesão
-26020490, Rua da Pega
-1327589130, Rua de S.Tiago
-1052277264, Rua homem de Cristo
-624265235, Avenida 5 de Outubro
-1271616022, Rua Jaime Moniz
-1237293081, Rua de São Martinho
-464757289, Rua Nova de Vilar
-1167473321, Rua do Caseiro
-1330250414, Rua do Catarino
-410351793, Rua da Linha
-100165429, Rua do Breijo
-1110673720, Rua Direita de Aradas
-1131574723, Rua do Sacobão
+2, Rua Luis Bráz Abreu
+5, Rua da Liberdade

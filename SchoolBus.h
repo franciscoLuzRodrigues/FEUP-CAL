@@ -59,6 +59,7 @@ class School {
 	Vertex<Node> *node;
 
 public:
+	School(){}
 	School(string name, int morningTime, int afternoonTime, Vertex<Node> *node);
 	string getName();
 	void setName(string name);
@@ -80,6 +81,7 @@ public:
 	void setName(string name);
 	int getAge();
 	void setAge(int age);
+	void getInfo();
 };
 
 class BusStop {
@@ -90,6 +92,8 @@ class BusStop {
 public:
 	BusStop(Vertex<Node> *node,string address);
 	vector<Student*> getStudentsInStop();
+	void addStudentInStop(Student* student){studentsInStop.push_back(student);}
+	void eraseStudentInStop(int index){studentsInStop.erase(studentsInStop.begin() + index);}
 	string getAddress(){return address;}
 	void setAddress(string address){this->address = address;}
 	void setNode(Vertex<Node> *node) { this->node = node; }
@@ -98,14 +102,12 @@ public:
 
 class Bus {
 	int busId;
-	School* school;
-	vector<Student*> busStudents;
 	bool apt;
 	int capacity;
 	int occupation;
 
 public:
-	Bus(int busId, School* school, vector<Student*> busStudents, bool apt, int capacity, int occupation);
+	Bus(int busId, bool apt, int capacity, int occupation);
 	int getBusId();
 	void setBusId();
 	School* getSchool();
@@ -120,16 +122,13 @@ public:
 
 class Garage {
 	int numberOfBuses;
-	vector<Bus*> busesInGarage;
-	vector<Bus*> busesToGo;
-	Node *node;
+	vector<Bus*> companyVehicles;
+	Vertex<Node> *node;
 
 public:
-	Garage(int numberOfBuses, vector<Bus*> busesInGarage, vector<Bus*> busesToGo);
-	vector<Bus*> getBusesInGarage();
-	vector<Bus*> getBusesToGo();
+	Garage(vector<Bus*> busesInGarage, int numberOfBuses, Vertex<Node> *node);
+	vector<Bus *> getBuses(){return companyVehicles;}
+	Vertex<Node> *getNode(){return node;}
 };
-
-
 
 #endif /* SCHOOLBUS_H_ */
