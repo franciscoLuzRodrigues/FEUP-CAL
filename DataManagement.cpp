@@ -83,6 +83,7 @@ int DataManager::readEdgeFile(string fileName) {
 		Node scr = getNode(edgeSrc, graph);
 		Node dst = getNode(edgeDst, graph);
 		graph.addEdge(scr, dst, scr.getDistance(dst));
+		graph.addEdge(dst, scr, scr.getDistance(dst));
 	}
 	return 0;
 }
