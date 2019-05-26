@@ -23,7 +23,7 @@ private:						 //Data structures
 	vector<Student> students;
 	MutablePriorityQueue<Vertex<Node>> nearestV;
 	School school;
-	Garage *garage;
+	Garage garage;
 	//protected:
 	//Graph<Node> graph;
 
@@ -38,19 +38,22 @@ public:
 	void addBusStop(BusStop busStop);
 	void eraseStudent(int index) { students.erase(students.begin() + index); }
 	void eraseBusStop(int index) { busStops.erase(busStops.begin() + index); }
+	void eraseBus(int index) { garage.eraseBus(index); }
 	vector<School> getSchools() { return schools; }
 	vector<BusStop>* getAllBusStops() { return &allBusStops; }
 	void addAllBusStop(BusStop busStop);
 	vector<BusStop>* getBusStops() { return &busStops; }
 	vector<Student> getStudents() { return students; }
-	vector<Node> getPathNodes(vector<Node> bStops);
+	vector<Node> getPathNodes(vector<Node> &bStops);
 	vector<vector<Node>> getMultPaths();
 	int getPathDistance(vector<Node> path);
 	vector<vector<Node>> getPath(); 
 	void setSchool(School school) { this->school = school; }
-	void setGarage(Garage *garage) { this->garage = garage; }
+	void setGarage(Garage garage) { this->garage = garage; }
+	Garage getGarage() { return garage; }
+	void addBusToGarage(Bus bus){garage.addBus(bus);}
 	vector<Node>toVecNode(vector<BusStop> b);
-	void eraseNodeWithID(int id);
+	void eraseNodeWithID(vector<Node>& bStops, int id);
 	BusStop* getBusStopByNode(vector<BusStop> &temp, Vertex<Node> *node);
 	void increaseStudent(Student *student, int index);
 	void updateQ(vector<Node> newBusStop);

@@ -77,6 +77,7 @@ void Student::getInfo()
 	cout << "------------------------" << endl;
 	cout << "|Name: "<< name       << endl;
 	cout << "|Age: "<< age      << endl;
+	cout << "------------------------" << endl;
 }
 
 
@@ -134,9 +135,19 @@ void Bus::setOccupation(int occupation)
 {
 	this->occupation = occupation;
 }
+
+void Bus::getInfo()
+{
+	cout<<endl;
+	cout << "------------------------" << endl;
+	cout << "|Id: "<< busId       << endl;
+	cout << "|Capacity: "<< capacity      << endl;
+	cout << "------------------------" << endl;
+}
+
 //////////////GARAGE//////////////////////////////////
 
-Garage::Garage(vector<Bus*> busesInGarage, int numberOfBuses, Vertex<Node> *node)
+Garage::Garage(vector<Bus> busesInGarage, int numberOfBuses, Vertex<Node> *node)
 {
 	companyVehicles = busesInGarage;
 	this->numberOfBuses = numberOfBuses;

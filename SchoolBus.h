@@ -118,17 +118,21 @@ public:
 	void setCapacity(int capacity);
 	int getOccupation();
 	void setOccupation(int occupation);
+	void getInfo();
 };
 
 class Garage {
 	int numberOfBuses;
-	vector<Bus*> companyVehicles;
+	vector<Bus> companyVehicles;
 	Vertex<Node> *node;
 
 public:
-	Garage(vector<Bus*> busesInGarage, int numberOfBuses, Vertex<Node> *node);
-	vector<Bus *> getBuses(){return companyVehicles;}
+	Garage(vector<Bus> busesInGarage, int numberOfBuses, Vertex<Node> *node);
+	Garage(){}
+	vector<Bus > getBuses(){return companyVehicles;}
 	Vertex<Node> *getNode(){return node;}
+	void addBus(Bus bus){companyVehicles.push_back(bus);}
+	void eraseBus(int index){companyVehicles.erase(companyVehicles.begin() + index);}
 };
 
 #endif /* SCHOOLBUS_H_ */

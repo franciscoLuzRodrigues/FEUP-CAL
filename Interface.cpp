@@ -49,7 +49,7 @@ void showStudents()
 	}
 
 	dataMan.getStudents().at(choice).getInfo();
-	dataMan.printStudentAddress(dataMan.getStudents().at(choice).getName());
+	//dataMan.printStudentAddress(dataMan.getStudents().at(choice).getName());
 }
 
 void removeStudent()
@@ -57,34 +57,49 @@ void removeStudent()
 	string name;
 	cout<<"What's the Student's name? "<<endl;
 	cin>>name;
-	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
-	{
-		if(dataMan.getStudents().at(i).getName() == name)
-		{
-			dataMan.eraseStudent(i);
-			break;
-		}	
-	}
 	
 	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
 	{
 		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop().size();
-		for(unsigned int j=0; j< studentSize; j++)
+		cout<<"busStopSize "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<<endl;
+		for(int j=0; j< studentSize; j++)
 		{
+			cout<<"im burro "<< dataMan.getBusStops()->at(i).getStudentsInStop().at(j)->getName()<<endl;
 			Student studentInStop =*dataMan.getBusStops()->at(i).getStudentsInStop().at(j);
+			cout<<"Name q aparece "<<studentInStop.getName()<<" name pedido "<<name<<endl;
+			fflush(stdout);
 			if(studentInStop.getName() == name)
 			{
+				cout<<"studentSize"<<studentSize<<endl;
 				if(studentSize > 1)
 				{
+					cout<<"entrei no >1"<<endl;
+
 					dataMan.getBusStops()->at(i).eraseStudentInStop(j);
+					cout<<"size agr "<<studentSize<<endl;
+					fflush(stdout);
 				}
 				else
 				{
+					cout<<"entrei"<<endl;
+					fflush(stdout);
 					dataMan.eraseBusStop(i);
+					cout<<"busStopSize agr "<<dataMan.getBusStops()->size()<<endl;
+					fflush(stdout);
 				}
+
 			}
 		}
 	}
+
+	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
+		{
+			if(dataMan.getStudents().at(i).getName() == name)
+			{
+				dataMan.eraseStudent(i);
+				break;
+			}
+		}
 }
 void addStudent()
 {
@@ -136,12 +151,63 @@ void addStudent()
 
 	}
 	
-	for(int i = 0; i < dataMan.getBusStops()->size(); i++){
+/*	for(int i = 0; i < dataMan.getBusStops()->size(); i++){
 		cout <<i<< ". "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<< endl;
-	}
+	}*/
+}
 
+void addVehicle()
+{
+	int id,capacity;
+
+	cout << "Bus ID" << endl;
+	cin >> id;
+	cout << "Bus capacity" << endl;
+	cin >> capacity;
+
+
+Bus bus(id,1,capacity,0);
+dataMan.addBusToGarage(bus);
+cout<<"nr buses" << dataMan.getGarage().getBuses().size()<<endl;
 
 }
+
+void showVehicles()
+{
+	int choice;
+	for(unsigned int i=0; i<dataMan.getGarage().getBuses().size(); i++)
+	{
+		cout << i << ". " << dataMan.getGarage().getBuses().at(i).getBusId() << endl;
+	}
+
+	cout << dataMan.getGarage().getBuses().size() << ". Exit" << endl;
+	choice = Nav(0, dataMan.getGarage().getBuses().size());
+
+	if (choice == dataMan.getGarage().getBuses().size())
+	{
+		main_menu();
+	}
+
+	dataMan.getGarage().getBuses().at(choice).getInfo();
+
+}
+
+void removeVehicle()
+{
+	int id;
+	cout<<"Vehicle ID"<<endl;
+	cin>>id;
+
+	for(unsigned int i=0; i<dataMan.getGarage().getBuses().size(); i++)
+	{
+		if(dataMan.getGarage().getBuses().at(i).getBusId() == id)
+		{
+			dataMan.eraseBus(i);
+			break;
+		}
+	}
+}
+
 void vehicle_menu()
 {
 	int choice;
@@ -149,20 +215,23 @@ void vehicle_menu()
 	cout << "----------------------" << endl;
 	cout << "|      VEHICLES       |" << endl;
 	cout << "----------------------" << endl << endl;
-	cout << "0. Remove Vehicles" << endl;
-	cout << "1. Add Vehicle" << endl;
+	cout << "0. Add Vehicle" << endl;
+	cout << "1. Remove Vehicles" << endl;
 	cout << "2. show all Vehicles" << endl;
 	cout << "3. Exit" << endl;
 
-	switch (Nav(0, 2))
+	switch (Nav(0, 3))
 	{
 	case 0:
-
+		addVehicle();
 		break;
 	case 1:
-
+		removeVehicle();
 		break;
 	case 2:
+		showVehicles();
+		break;
+	case 3:
 		main_menu();
 		break;
 	default:
@@ -182,7 +251,7 @@ void student_menu()
 	cout << "2. Show students" << endl;
 	cout << "3. Exit" << endl;
 
-	switch (Nav(0, 2))
+	switch (Nav(0, 3))
 	{
 	case 0:
 		addStudent();
@@ -203,7 +272,7 @@ void student_menu()
 }
 
 bool isInPath(vector<Node> path, int ID1, int ID2){
-	for(int i = 0; i < path.size()-1; i++){
+	for(unsigned int i = 0; i < path.size()-1; i++){
 		if(path.at(i).getID() == ID1 && path.at(i+1).getID() == ID2) return true;
 	}
 	return false;
@@ -213,14 +282,14 @@ void drawResult(vector<Node> path){
 	GraphViewer gv = GraphViewer(1000,1000,false);
 		gv.createWindow(1000,1000);
 
-		for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
 			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
 			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
 			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
 			gv.addNode(idNo, x, y);
 		}
 
-		for(int i = 0; i < path.size(); i++){
+		for(unsigned int i = 0; i < path.size(); i++){
 			int idNo = path.at(i).getID();
 			gv.setVertexColor(idNo,BLUE);
 		}
@@ -232,7 +301,7 @@ void drawResult(vector<Node> path){
 
 					vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(i)->getAdj();
 
-					for(int j = 0; j < adj.size(); j++){
+					for(unsigned int j = 0; j < adj.size(); j++){
 						int idNo2 = adj.at(j).getDst().getInfo().getID();
 						gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
 						if(isInPath(path,idNo1,idNo2)){
@@ -271,20 +340,31 @@ void schoolChoice_menu()
 		main_menu();
 	}
 
-	cout<<"School choice: "<< dataMan.getSchools().at(choice).getName()<<endl;
-
 	dataMan.setSchool(dataMan.getSchools().at(choice));
 
 
-		Bus bus(1,1,5,0);
+		/*Bus bus(1,1,2,0);
+		Bus bus2(2,1,2,0 );
+		Bus bus3(3,1,1,0 );
 		vector<Bus*> buses;
 		buses.push_back(&bus);
+		buses.push_back(&bus2);
+		buses.push_back(&bus3);
 		Garage garage(buses,1,dataMan.getSchools().at(choice+1).getNode());
-		dataMan.setGarage(&garage);
+		dataMan.setGarage(garage);*/
 		vector<vector<Node>> p = dataMan.getPath();
+		for(unsigned int i = 0; i < p.size(); i++){
+			for(unsigned int j = 0; j < p.at(i).size(); j++){
+				cout << "Bus "<< i<< " Node: "<< p.at(i).at(j).getID() << endl;
+			}
+		}
+
+		if(p.size() == 0)
+		{
+			cout<<"Try Again"<<endl;
+			main_menu();
+		}
 		drawResult(p.at(0));
-
-
 }
 
 
@@ -295,7 +375,7 @@ void drawGraph()
 	GraphViewer gv = GraphViewer(1000, 1000, false);
 	gv.createWindow(1000, 1000);
 
-	for (int i = 0; i < dataMan.graph.getNumVertex(); i++)
+	for (unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++)
 	{
 		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
 		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
@@ -311,7 +391,7 @@ void drawGraph()
 
 		vector<Edge<Node>> adj = dataMan.graph.getVertexSet().at(i)->getAdj();
 
-		for (int j = 0; j < adj.size(); j++)
+		for (unsigned int j = 0; j < adj.size(); j++)
 		{
 			int idNo2 = adj.at(j).getDst().getInfo().getID();
 			gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
@@ -364,7 +444,6 @@ void city_menu()
 		p1.push_back(dataMan.graph.getVertexSet().at(i)->getInfo());
 	}
 	drawGraph();*/
-
 	main_menu();
 }
 

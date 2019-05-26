@@ -135,7 +135,12 @@ int DataManager::loadPointsOfInterest(string fileName) {
 
 	while (!poiFile.eof())
 	{
+
 		getline(poiFile, line);
+		if (line == "garage")
+		{
+			break;
+		}
 		nodeID = stoi(line.substr(0, line.find(',')));
 		line.erase(0, line.find(',') + 2);
 		BSaddress = line.substr(0, line.find(','));
@@ -152,8 +157,21 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		}
 
 	}
-	cout <<"\nDataMan School vec size: "<< schools.size();
-	cout<<"\nDataMan AllbusStops vec size: "<<allBusStops.size()<<endl;
+	getline(poiFile,line);
+
+	for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
+	{
+		if(graph.getVertexSet().at(i)->getInfo().getID() == stoi(line))
+		{
+			vector<Bus> buses;
+			Garage garage(buses, 0, graph.getVertexSet().at(i));
+			setGarage(garage);
+			break;
+		}
+	}
+
+	//cout <<"\nDataMan School vec size: "<< schools.size();
+	//cout<<"\nDataMan AllbusStops vec size: "<<allBusStops.size()<<endl;
 	return 0;
 
 }
@@ -165,22 +183,29 @@ void DataManager::increaseStudent(Student* student, int index)
 
 void DataManager::updateQ(vector<Node> newBusStop)
 {
+	cout << "\n\t updating Q\n";
 	while (!nearestV.empty())
 	{
 		nearestV.extractMin();
 	}
 
+	if(nearestV.empty())
+	{cout<< "\n\t Q is empty\n";}
+
+	cout<<"\nInserting "<<newBusStop.size() << endl;
 	for (unsigned int i = 0; i < newBusStop.size(); i++)
 	{
+		cout<< "Entered for\n";
 		Vertex<Node> *v = graph.findVertex(newBusStop.at(i));
 		nearestV.insert(v);
+		cout<< "Inserted in q, node with id: "<< v->getInfo().getID()<< endl;
 	}
 }
 
-void DataManager::eraseNodeWithID(int id){
-	for(unsigned int i = 0; i < busStops.size(); i++){
-		if(busStops.at(i).getNode()->getInfo().getID() == id){
-			busStops.erase(busStops.begin()+i);
+void DataManager::eraseNodeWithID(vector<Node>& bStops, int id){
+	for(unsigned int i = 0; i < bStops.size(); i++){
+		if(bStops.at(i).getID() == id){
+			bStops.erase(bStops.begin()+i);
 			return;
 		}
 	}
@@ -236,9 +261,9 @@ bool DataManager::verifyNumberStudents()
 	int busTotalCapacity = 0;
 	int numStudents = 0;
 
-	for(unsigned int i=0; i< garage->getBuses().size(); i++)
+	for(unsigned int i=0; i< garage.getBuses().size(); i++)
 	{
-		busTotalCapacity += garage->getBuses().at(i)->getCapacity();
+		busTotalCapacity += garage.getBuses().at(i).getCapacity();
 	}
 
 	for (unsigned int i = 0; i < busStops.size(); i++)
@@ -261,9 +286,20 @@ int getIndexFromTemp(vector<BusStop> temp, int id)
 	return -1;
 }
 
-vector<vector<Node>> DataManager::getMultPaths(){
+vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with ordered BusStops 1 per each bus
 
 	vector<vector<Node>> bsVec;
+	if(busStops.size() == 0)
+	{
+		cout << "There arent bus stops"<<endl;
+		return bsVec;
+	}
+
+	if(garage.getBuses().size() == 0)
+	{
+		cout << "There arent buses"<<endl;
+		return bsVec;
+	}
 
 	if (verifyNumberStudents())
 	{
@@ -278,32 +314,25 @@ vector<vector<Node>> DataManager::getMultPaths(){
 	int i=0;
 	while (!temp.empty())
 	{
-		graph.dijkstraShortestPath(garage->getNode()->getInfo());
+		graph.dijkstraShortestPath(garage.getNode()->getInfo());
 		temp2 = toVecNode(temp);
 		updateQ(temp2);
-		int capacity = garage->getBuses().at(i)->getCapacity();
-		int occupation = garage->getBuses().at(i)->getOccupation();
+		int capacity = garage.getBuses().at(i).getCapacity();
+		int occupation = garage.getBuses().at(i).getOccupation();
 
 		while (occupation != capacity && !temp.empty())
 		{
-			cout<<"while"<<temp.size()<<endl;
-			Vertex<Node>* node = nearestV.extractMin();
-			cout<<"min"<<endl;
-			cout<<"id node"<<node->getInfo().getID()<<endl;
+			//cout<<"while"<<temp.size()<<endl;
 
-			cout<<"temp size"<<node->getInfo().getID()<<endl;
+			Vertex<Node>* node = nearestV.extractMin();
 			BusStop* b = getBusStopByNode(temp, node); 
-			cout<<"getBusStop"<<b->getStudentsInStop().size()<<endl;
 
 			int numS = b->getStudentsInStop().size();
 
-			cout<< "Number of students in this busStop: "<<numS<<endl;
-			cout << "Occupation: "<< occupation << endl;
-			cout << "Capacity: "<< capacity<<endl;
+
 
 			if ((numS + occupation) > capacity)
 			{
-				cout<<"\nEntrei no if\n";
 				int numStudents = capacity - occupation;
 				for (unsigned int k = 0; k < numStudents; k++)
 				{
@@ -311,63 +340,65 @@ vector<vector<Node>> DataManager::getMultPaths(){
 				}
 				occupation += numStudents;
 				nearestV.insert(node);
-				cout<<"oi"<<endl;
+				busXpath.push_back(node->getInfo());
+
 			}
 			else
 			{
-				cout<<"\nEntrei no else\n";
 				occupation += b->getStudentsInStop().size();
+				//cout<<"NODE ID para o vec"<< node->getInfo().getID()<<endl;
 				busXpath.push_back(node->getInfo());
 				int j = getIndexFromTemp(temp, b->getNode()->getInfo().getID());
 				temp.erase(temp.begin()+j);
-				if(temp.empty()){
-					cout <<"temp ta empty\n";
-				}
-
-				fflush(stdout);
+				graph.dijkstraShortestPath(garage.getNode()->getInfo());
+				temp2 = toVecNode(temp);
+				updateQ(temp2);
 
 			}
-			
-			//cout << "node BS: "<< busXpath.at(0).getID()<<endl;
-			fflush(stdout);
-
 
 		}
 
+		/*	for(unsigned int i=0; i< busXpath.size();i++)
+		{
+			cout<<"busXpath"<<busXpath.at(i).getID()<<endl;
+		}*/
 		i++;
-		//cout<< "I++ bitch\n"<<endl;
-		fflush(stdout);
+		vector<Node> path;
+		path = getPathNodes(busXpath);
+		bsVec.push_back(path);
 
-		bsVec.push_back(getPathNodes(busXpath));
+		busXpath.clear();
+
 	}
 
-	//cout <<"size dos buses: "<< bsVec.size()<<endl;
-	fflush(stdout);
+
 
 	return bsVec;
 }
 
-vector<Node> DataManager::getPathNodes(vector<Node> bStops)
+vector<Node> DataManager::getPathNodes(vector<Node> &bStops) //Returns vector with ordered BusStops
 {
-	cout<<"pls  be 1: "<< school.getNode()->getInfo().getID()<<endl;
 	Vertex<Node> nearV(*new Node(-1,-1,-1));
 	vector<Node> path;
 
-    graph.dijkstraShortestPath(garage->getNode()->getInfo());
+    graph.dijkstraShortestPath(garage.getNode()->getInfo());
+
 	updateQ(bStops);
 
 	nearV = *nearestV.extractMin();
-	path.push_back(garage->getNode()->getInfo());
+	path.push_back(garage.getNode()->getInfo());
 	path.push_back(nearV.getInfo());
+
 	unsigned int BSsize = bStops.size() + 1;
+
 	while(path.size() != BSsize){
-		eraseNodeWithID(nearV.getInfo().getID());
+
+		eraseNodeWithID(bStops, nearV.getInfo().getID());
 		graph.dijkstraShortestPath(nearV.getInfo());
 		updateQ(bStops);
 		nearV = *nearestV.extractMin();
 		path.push_back(nearV.getInfo());
 	}
-	cout<< "SCHOOL"<<school.getNode()->getInfo().getID()<<endl;
 
 	path.push_back(school.getNode()->getInfo());
 
@@ -375,7 +406,7 @@ vector<Node> DataManager::getPathNodes(vector<Node> bStops)
 
 }
 
-vector<vector<Node>> DataManager::getPath()
+vector<vector<Node>> DataManager::getPath() //Returns vector assembled Paths
 {
 	vector<vector<Node>> pathNode;
 	vector<vector<Node>> finalPath;
@@ -387,7 +418,7 @@ vector<vector<Node>> DataManager::getPath()
 			cout << "ID: "<< pathNode.at(k).at(i).getID()<<endl;
 		}
 		vector<Node> temp, nodePath;
-		nodePath.push_back(garage->getNode()->getInfo());
+		nodePath.push_back(garage.getNode()->getInfo());
 
 		for(unsigned int j = 0; j < pathNode.at(k).size() -1; j++)
 		{
