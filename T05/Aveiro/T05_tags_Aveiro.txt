@@ -1,6 +1,21 @@
 school
-1, Escola C+S João Afonso de Aveiro, 8, 15
-6, AEVA - Escola Profissional de Aveiro, 9, 17
+503706269, Escola C+S Joao Afonso de Aveiro, 8, 15
+503706223, AEVA - Escola Profissional de Aveiro, 9, 17
+482743761, Jose Estevao Secondary School, 8, 17
 house
-2, Rua Luis Bráz Abreu
-5, Rua da Liberdade
+71879177, Rua Luis Braz Abreu
+503706185, Rua da Liberdade
+503706174, Rua de Aquilino Ribeiro
+503706213, Rua Jaime Cortesao
+1110350192, Rua da Pega
+503706272, Rua de S.Tiago
+503706224, Rua homem de Cristo
+503706239, Avenida 5 de Outubro
+503706328, Rua Jaime Moniz
+503706263, Rua de Sao Martinho
+53706235, Rua Nova de Vilar
+1131574882, Rua do Caseiro
+1131574753, Rua do Catarino
+1131574888, Rua da Linha
+garage
+503706297

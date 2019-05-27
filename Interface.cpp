@@ -319,6 +319,54 @@ void drawResult(vector<Node> path){
 		gv.closeWindow();
 }
 
+void drawMultiPaths(vector<vector<Node>> path){
+	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
+
+	GraphViewer gv = GraphViewer(1000,1000,false);
+	gv.createWindow(1000,1000);
+
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+		int r = 2500;
+		x%=r;
+		y%=r;
+		gv.addNode(idNo, x, y);
+	}
+
+	for(int i = 0; i < path.size(); i++){
+		vector<Node> subPath = path.at(i);
+
+		for(unsigned int j = 0; j < subPath.size(); j++){
+			int idNo = subPath.at(j).getID();
+			gv.setVertexColor(idNo,MAGENTA);
+		}
+
+		int idA = 0;
+
+		for(int j = 0; j < dataMan.graph.getNumVertex(); j++){
+			int idNo1 = dataMan.graph.getVertexSet().at(j)->getInfo().getID();
+
+			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(j)->getAdj();
+
+			for(unsigned int k = 0; k < adj.size(); k++){
+				int idNo2 = adj.at(k).getDst().getInfo().getID();
+				gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
+				if(isInPath(subPath,idNo1,idNo2)){
+					gv.setEdgeColor(idA,colors.at(i));
+				}
+				idA++;
+			}
+		}
+	}
+	gv.rearrange();
+
+	char a;
+	cin >> a;
+
+	gv.closeWindow();
+}
 
 void schoolChoice_menu()
 {
@@ -343,16 +391,8 @@ void schoolChoice_menu()
 	dataMan.setSchool(dataMan.getSchools().at(choice));
 
 
-		/*Bus bus(1,1,2,0);
-		Bus bus2(2,1,2,0 );
-		Bus bus3(3,1,1,0 );
-		vector<Bus*> buses;
-		buses.push_back(&bus);
-		buses.push_back(&bus2);
-		buses.push_back(&bus3);
-		Garage garage(buses,1,dataMan.getSchools().at(choice+1).getNode());
-		dataMan.setGarage(garage);*/
 		vector<vector<Node>> p = dataMan.getPath();
+
 		for(unsigned int i = 0; i < p.size(); i++){
 			for(unsigned int j = 0; j < p.at(i).size(); j++){
 				cout << "Bus "<< i<< " Node: "<< p.at(i).at(j).getID() << endl;
@@ -364,7 +404,11 @@ void schoolChoice_menu()
 			cout<<"Try Again"<<endl;
 			main_menu();
 		}
-		drawResult(p.at(0));
+
+		//drawResult(p.at(0));
+		drawMultiPaths(p);
+
+		main_menu();
 }
 
 
@@ -438,12 +482,6 @@ void city_menu()
 	dataMan.loadPointsOfInterest(tagFile);
 
 
-/*
-	vector<Node> p1;
-	for(int i = 0; i< dataMan.graph.getVertexSet().size(); i++){
-		p1.push_back(dataMan.graph.getVertexSet().at(i)->getInfo());
-	}
-	drawGraph();*/
 	main_menu();
 }
 
