@@ -16,16 +16,15 @@ using namespace std;
 
 class DataManager
 {
-private:						 //Data structures
-	vector<School> schools;		 //Point of interest
-	vector<BusStop> allBusStops; //Point of interest
-	vector<BusStop> busStops;	//Point of interest
+private:
+	vector<School> schools;
+	vector<BusStop> allBusStops;
+	vector<BusStop> busStops;
 	vector<Student> students;
 	MutablePriorityQueue<Vertex<Node>> nearestV;
 	School school;
 	Garage garage;
-	//protected:
-	//Graph<Node> graph;
+
 
 public:
 	Graph<Node> graph;
@@ -46,7 +45,6 @@ public:
 	vector<Student> getStudents() { return students; }
 	vector<Node> getPathNodes(vector<Node> &bStops);
 	vector<vector<Node>> getMultPaths();
-	int getPathDistance(vector<Node> path);
 	vector<vector<Node>> getPath(); 
 	void setSchool(School school) { this->school = school; }
 	void setGarage(Garage garage) { this->garage = garage; }

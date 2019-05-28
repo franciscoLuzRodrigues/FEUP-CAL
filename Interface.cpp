@@ -16,17 +16,7 @@ DataManager dataMan;
 void main_menu();
 
 //INPUT VALIDATION//
-/**
- * @brief Checks if the string inputed has a number when it is not supposed to
- * @param s String to be analyzed
- * @return Holds true if the string is correct
- */
-bool hasNumber(string s)
-{
-    return(s.find_first_of("0123456789") == string::npos);
-}
 
-////GENERAL FUNCTIONS//// (used throughout project, mostly for input verification)
 int Nav(int bottom, int top)
 { //tests for valid input keys and returns the inputed char
 	int key;
@@ -43,6 +33,18 @@ int Nav(int bottom, int top)
 	return key;
 }
 
+/**
+ * @brief Checks if the string inputed has a number when it is not supposed to
+ * @param s String to be analyzed
+ * @return Holds true if the string is correct
+ */
+bool hasNumber(string s)
+{
+    return(s.find_first_of("0123456789") == string::npos);
+}
+
+
+//Functions for the Students Menu
 void showStudents()
 {
 	int choice;
@@ -60,62 +62,43 @@ void showStudents()
 	}
 
 	dataMan.getStudents().at(choice).getInfo();
-	//dataMan.printStudentAddress(dataMan.getStudents().at(choice).getName());
 }
 
 void removeStudent()
 {
-	string name;
-	cout<<"What's the Student's name? "<<endl;
-	cin>>name;
-    while(!hasNumber(name))
-    {
-        cout << "Invalid name, try again: "<< endl;
-        cin>>name;
-    }
+	int remStuId;
+	cout<<"What's the Student's Id? "<<endl;
+	cin>>remStuId;
+	while(cin.fail())
+	{
+		cout << "Invalid ID, try again: " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> remStuId;
+	}
 	
 	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
 	{
-		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop().size();
-		cout<<"busStopSize "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<<endl;
+		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop()->size();
 		for(int j=0; j< studentSize; j++)
 		{
-			cout<<"im burro "<< dataMan.getBusStops()->at(i).getStudentsInStop().at(j)->getName()<<endl;
-			Student studentInStop =*dataMan.getBusStops()->at(i).getStudentsInStop().at(j);
-			cout<<"Name q aparece "<<studentInStop.getName()<<" name pedido "<<name<<endl;
-			fflush(stdout);
-			if(studentInStop.getName() == name)
+			if(*dataMan.getBusStops()->at(i).getStudentsInStop()->at(j) == dataMan.getStudents().at(remStuId))//studentInStop.getName() == name)
 			{
-				cout<<"studentSize"<<studentSize<<endl;
 				if(studentSize > 1)
 				{
-					cout<<"entrei no >1"<<endl;
-
 					dataMan.getBusStops()->at(i).eraseStudentInStop(j);
-					cout<<"size agr "<<studentSize<<endl;
-					fflush(stdout);
 				}
 				else
 				{
-					cout<<"entrei"<<endl;
-					fflush(stdout);
 					dataMan.eraseBusStop(i);
-					cout<<"busStopSize agr "<<dataMan.getBusStops()->size()<<endl;
-					fflush(stdout);
 				}
 
 			}
 		}
 	}
 
-	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
-		{
-			if(dataMan.getStudents().at(i).getName() == name)
-			{
-				dataMan.eraseStudent(i);
-				break;
-			}
-		}
+			dataMan.eraseStudent(remStuId);
+
 }
 void addStudent()
 {
@@ -134,6 +117,7 @@ void addStudent()
     }
 	cout << "Student's age" << endl;
 	cin >> age;
+
 	while(cin.fail())
 	{
 		cout << "Invalid age, try again: " << endl;
@@ -173,29 +157,19 @@ void addStudent()
 	{
 		cout<< "\nHere"<< endl;
 		dataMan.getAllBusStops()->at(choice).addStudentInStop(&s);
-		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop().size()<<endl;
+		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop()->size()<<endl;
 		dataMan.addBusStop(dataMan.getAllBusStops()->at(choice));
 
 	}
 	
-/*	for(int i = 0; i < dataMan.getBusStops()->size(); i++){
-		cout <<i<< ". "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<< endl;
-	}*/
 }
 
+
+// Functions for Vehicle Menu
 void addVehicle()
 {
-	int id,capacity;
+	int capacity;
 
-	cout << "Bus ID" << endl;
-	cin >> id;
-	while(cin.fail())
-	{
-		cout << "Invalid ID, try again: " << endl;
-		cin.clear();
-		cin.ignore(100, '\n');
-		cin >> id;
-	}
 	cout << "Bus capacity" << endl;
 	cin >> capacity;
 	while(cin.fail())
@@ -207,7 +181,7 @@ void addVehicle()
 	}
 
 
-Bus bus(id,1,capacity,0);
+Bus bus(1,capacity,0);
 dataMan.addBusToGarage(bus);
 
 }
@@ -217,7 +191,7 @@ void showVehicles()
 	int choice;
 	for(unsigned int i=0; i<dataMan.getGarage().getBuses().size(); i++)
 	{
-		cout << i << ". " << dataMan.getGarage().getBuses().at(i).getBusId() << endl;
+		cout << i << ". " << dataMan.getGarage().getBuses().at(i).getCapacity() << endl;
 	}
 
 	cout << dataMan.getGarage().getBuses().size() << ". Exit" << endl;
@@ -234,20 +208,95 @@ void showVehicles()
 
 void removeVehicle()
 {
+	if(dataMan.getGarage().getBuses().size()==0)
+	{
+		cout<<"There are no buses to delete."<<endl;
+	}
 	int id;
 	cout<<"Vehicle ID"<<endl;
 	cin>>id;
-
-	for(unsigned int i=0; i<dataMan.getGarage().getBuses().size(); i++)
+	while(cin.fail()||dataMan.getGarage().getBuses().size()< id)
 	{
-		if(dataMan.getGarage().getBuses().at(i).getBusId() == id)
-		{
-			dataMan.eraseBus(i);
-			break;
-		}
+		cout << "Invalid Id, try again: " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> id;
 	}
+
+
+	dataMan.eraseBus(id);
 }
 
+
+//Functions to display the graph
+
+bool isInPath(vector<Node> path, int ID1, int ID2){
+	for(unsigned int i = 0; i < path.size()-1; i++){
+		if(path.at(i).getID() == ID1 && path.at(i+1).getID() == ID2) return true;
+	}
+	return false;
+}
+
+
+void drawMultiPaths(vector<vector<Node>> path){
+	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
+
+	int minX = dataMan.graph.getVertexSet().at(0)->getInfo().getX();
+	int minY = dataMan.graph.getVertexSet().at(0)->getInfo().getY();
+
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+
+		if(x < minX) minX = x;
+		if(y < minY) minY = y;
+	}
+
+	GraphViewer gv = GraphViewer(1000,1000,false);
+	gv.createWindow(1000,1000);
+
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX() - minX;
+		int y = minY - dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+		gv.addNode(idNo, x, y);
+	}
+
+	for(int i = 0; i < path.size(); i++){
+		vector<Node> subPath = path.at(i);
+
+		for(unsigned int j = 0; j < subPath.size(); j++){
+			int idNo = subPath.at(j).getID();
+			gv.setVertexColor(idNo,MAGENTA);
+		}
+
+		int idA = 0;
+
+		for(int j = 0; j < dataMan.graph.getNumVertex(); j++){
+			int idNo1 = dataMan.graph.getVertexSet().at(j)->getInfo().getID();
+
+			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(j)->getAdj();
+
+			for(unsigned int k = 0; k < adj.size(); k++){
+				int idNo2 = adj.at(k).getDst().getInfo().getID();
+				gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
+				if(isInPath(subPath,idNo1,idNo2)){
+					gv.setEdgeThickness(idA,1.5);
+					gv.setEdgeColor(idA,colors.at(i%9));
+				}
+				idA++;
+			}
+		}
+	}
+	gv.rearrange();
+
+	char a;
+	cin >> a;
+
+	gv.closeWindow();
+}
+
+//MENUS
 void vehicle_menu()
 {
 	int choice;
@@ -311,111 +360,7 @@ void student_menu()
 	main_menu();
 }
 
-bool isInPath(vector<Node> path, int ID1, int ID2){
-	for(unsigned int i = 0; i < path.size()-1; i++){
-		if(path.at(i).getID() == ID1 && path.at(i+1).getID() == ID2) return true;
-	}
-	return false;
-}
 
-void drawResult(vector<Node> path){
-	GraphViewer gv = GraphViewer(1000,1000,false);
-		gv.createWindow(1000,1000);
-
-		for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
-			int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-			int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-			int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-			gv.addNode(idNo, x, y);
-		}
-
-		for(unsigned int i = 0; i < path.size(); i++){
-			int idNo = path.at(i).getID();
-			gv.setVertexColor(idNo,BLUE);
-		}
-
-		int idA = 0;
-
-				for(int i = 0; i < dataMan.graph.getNumVertex(); i++){
-					int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-
-					vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(i)->getAdj();
-
-					for(unsigned int j = 0; j < adj.size(); j++){
-						int idNo2 = adj.at(j).getDst().getInfo().getID();
-						gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
-						if(isInPath(path,idNo1,idNo2)){
-							gv.setEdgeColor(idA,ORANGE);
-						}
-						idA++;
-					}
-				}
-
-		gv.rearrange();
-
-		char a;
-		cin >> a;
-
-		gv.closeWindow();
-}
-
-void drawMultiPaths(vector<vector<Node>> path){
-	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
-
-	int minX = dataMan.graph.getVertexSet().at(0)->getInfo().getX();
-	int minY = dataMan.graph.getVertexSet().at(0)->getInfo().getY();
-
-	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
-		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-
-		if(x < minX) minX = x;
-		if(y < minY) minY = y;
-	}
-
-	GraphViewer gv = GraphViewer(1000,1000,false);
-	gv.createWindow(1000,1000);
-
-	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
-		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX() - minX;
-		int y = minY - dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-		gv.addNode(idNo, x, y);
-	}
-
-	for(int i = 0; i < path.size(); i++){
-		vector<Node> subPath = path.at(i);
-
-		for(unsigned int j = 0; j < subPath.size(); j++){
-			int idNo = subPath.at(j).getID();
-			gv.setVertexColor(idNo,MAGENTA);
-		}
-
-		int idA = 0;
-
-		for(int j = 0; j < dataMan.graph.getNumVertex(); j++){
-			int idNo1 = dataMan.graph.getVertexSet().at(j)->getInfo().getID();
-
-			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(j)->getAdj();
-
-			for(unsigned int k = 0; k < adj.size(); k++){
-				int idNo2 = adj.at(k).getDst().getInfo().getID();
-				gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
-				if(isInPath(subPath,idNo1,idNo2)){
-					gv.setEdgeThickness(idA,1.5);
-					gv.setEdgeColor(idA,colors.at(i%9));
-				}
-				idA++;
-			}
-		}
-	}
-	gv.rearrange();
-
-	char a;
-	cin >> a;
-
-	gv.closeWindow();
-}
 
 void schoolChoice_menu()
 {
@@ -460,45 +405,6 @@ void schoolChoice_menu()
 		main_menu();
 }
 
-
-
-
-void drawGraph()
-{
-	GraphViewer gv = GraphViewer(1000, 1000, false);
-	gv.createWindow(1000, 1000);
-
-	for (unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++)
-	{
-		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-		gv.addNode(idNo, x, y);
-	}
-
-	int idA = 0;
-
-	for (int i = 0; i < dataMan.graph.getNumVertex(); i++)
-	{
-		int idNo1 = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-
-		vector<Edge<Node>> adj = dataMan.graph.getVertexSet().at(i)->getAdj();
-
-		for (unsigned int j = 0; j < adj.size(); j++)
-		{
-			int idNo2 = adj.at(j).getDst().getInfo().getID();
-			gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
-			idA++;
-		}
-	}
-
-	gv.rearrange();
-
-	char a;
-	cin >> a;
-
-	gv.closeWindow();
-}
 
 void city_menu()
 {

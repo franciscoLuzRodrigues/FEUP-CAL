@@ -82,6 +82,11 @@ public:
 	int getAge();
 	void setAge(int age);
 	void getInfo();
+	bool operator ==(Student other){
+		if(this->name == other.getName() && this->age == other.getAge())
+				return true;
+			else return false;
+	}
 };
 
 class BusStop {
@@ -91,7 +96,7 @@ class BusStop {
 
 public:
 	BusStop(Vertex<Node> *node,string address);
-	vector<Student*> getStudentsInStop();
+	vector<Student*>* getStudentsInStop();
 	void addStudentInStop(Student* student){studentsInStop.push_back(student);}
 	void eraseStudentInStop(int index){studentsInStop.erase(studentsInStop.begin() + index);}
 	string getAddress(){return address;}
@@ -101,15 +106,12 @@ public:
 };
 
 class Bus {
-	int busId;
 	bool apt;
 	int capacity;
 	int occupation;
 
 public:
-	Bus(int busId, bool apt, int capacity, int occupation);
-	int getBusId();
-	void setBusId();
+	Bus(bool apt, int capacity, int occupation);
 	School* getSchool();
 	void setSchool(School* school);
 	bool getApt();

@@ -81,6 +81,8 @@ void Student::getInfo()
 }
 
 
+
+
 ///////////////BUSSTOP////////////////////////////////
 
 BusStop::BusStop(Vertex<Node> *node, string address)
@@ -88,27 +90,18 @@ BusStop::BusStop(Vertex<Node> *node, string address)
 	this->node = node;
 	this->address = address;
 }
-vector<Student*> BusStop::getStudentsInStop()
+vector<Student*>* BusStop::getStudentsInStop()
 {
-	return studentsInStop;
+	return &studentsInStop;
 }
 
 //////////////BUS/////////////////////////////////////
 
-Bus::Bus(int busId, bool apt, int capacity, int occupation)
+Bus::Bus(bool apt, int capacity, int occupation)
 {
-	this->busId = busId;;
 	this->apt = apt;
 	this->capacity = capacity;
 	this->occupation = occupation;
-}
-int Bus::getBusId()
-{
-	return busId;
-}
-void Bus::setBusId()
-{
-	this->busId = busId;
 }
 
 bool Bus::getApt()
@@ -140,7 +133,7 @@ void Bus::getInfo()
 {
 	cout<<endl;
 	cout << "------------------------" << endl;
-	cout << "|Id: "<< busId       << endl;
+	cout << "|apt: "<< apt       << endl;
 	cout << "|Capacity: "<< capacity      << endl;
 	cout << "------------------------" << endl;
 }
