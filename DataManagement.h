@@ -25,14 +25,13 @@ private:
 	School school;
 	Garage garage;
 
-
 public:
 	/**
  	* @brief Graph tthat stores the map information loaded from the files
  	* 
  	*/
 	Graph<Node> graph;
-	
+
 	/**
 	 * @brief Construct a new Data Manager object
 	 * 
@@ -62,7 +61,7 @@ public:
 	 * @return int - 0 if successfull and 1 if not
 	 */
 	int loadPointsOfInterest(string poiFilePath);
-	
+
 	/**
 	 * @brief Adds school to the schools vector
 	 * 
@@ -117,7 +116,7 @@ public:
 	 * 
 	 * @return vector<BusStop>* all possible busStops
 	 */
-	vector<BusStop>* getAllBusStops() { return &allBusStops; }
+	vector<BusStop> *getAllBusStops() { return &allBusStops; }
 
 	/**
 	 * @brief Adds a bus stop to the AllBusStops vector
@@ -131,7 +130,7 @@ public:
 	 * 
 	 * @return vector<BusStop>* busStopsVector
 	 */
-	vector<BusStop>* getBusStops() { return &busStops; }
+	vector<BusStop> *getBusStops() { return &busStops; }
 
 	/**
 	 * @brief Get the Students vector
@@ -162,15 +161,15 @@ public:
 	 * 
 	 * @return vector<vector<Node>> vector where each index contains a complete path of a bus
 	 */
-	vector<vector<Node>> getPath(); 
-	
+	vector<vector<Node>> getPath();
+
 	/**
 	 * @brief Set the School object
 	 * 
 	 * @param school new school
 	 */
 	void setSchool(School school) { this->school = school; }
-	
+
 	/**
 	 * @brief Set the Garage object
 	 * 
@@ -184,13 +183,13 @@ public:
 	 * @return Garage the current garage
 	 */
 	Garage getGarage() { return garage; }
-	
+
 	/**
 	 * @brief Adds a bus to a garage so it can be used for transport
 	 * 
 	 * @param bus  to be added
 	 */
-	void addBusToGarage(Bus bus){garage.addBus(bus);}
+	void addBusToGarage(Bus bus) { garage.addBus(bus); }
 
 	/**
 	 * @brief Construct a new vector<Node> based on the busStops b
@@ -199,15 +198,15 @@ public:
 	 * 
 	 * @return vector<Node> vector with the nodes that correspond to the b busStops
 	 */
-	vector<Node>toVecNode(vector<BusStop> b);
-	
+	vector<Node> toVecNode(vector<BusStop> b);
+
 	/**
 	 * @brief Erases bus stops based on their ID
 	 * 
 	 * @param bStops vector where it is intended to delete
 	 * @param id of the busStop to be deleted
 	 */
-	void eraseNodeWithID(vector<Node>& bStops, int id);
+	void eraseNodeWithID(vector<Node> &bStops, int id);
 
 	/**
 	 * @brief Find and returns the busStop with the vertex Node
@@ -216,7 +215,7 @@ public:
 	 * @param node vertex to be foung
 	 * @return BusStop* with vertex Node
 	 */
-	BusStop* getBusStopByNode(vector<BusStop> &temp, Vertex<Node> *node);
+	BusStop *getBusStopByNode(vector<BusStop> &temp, Vertex<Node> *node);
 
 	/**
 	 * @brief Adds a student a bus stop
@@ -240,7 +239,6 @@ public:
 	 * @return false otherwise
 	 */
 	bool verifyNumberStudents();
-
 };
 
 #endif /* DATA_MANAGEMENT_H_ */

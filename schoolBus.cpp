@@ -8,7 +8,6 @@ School::School(string name, int morningTime, int afternoonTime, Vertex<Node> *no
 	this->morningTime = morningTime;
 	this->afternoonTime = afternoonTime;
 	this->node = node;
-
 }
 
 string School::getName()
@@ -47,7 +46,6 @@ Student::Student(string name, int age)
 {
 	this->name = name;
 	this->age = age;
-
 }
 
 string Student::getName()
@@ -70,18 +68,14 @@ void Student::setAge(int age)
 	this->age = age;
 }
 
-
 void Student::getInfo()
 {
-	cout<<endl;
+	cout << endl;
 	cout << "------------------------" << endl;
-	cout << "|Name: "<< name       << endl;
-	cout << "|Age: "<< age      << endl;
+	cout << "|Name: " << name << endl;
+	cout << "|Age: " << age << endl;
 	cout << "------------------------" << endl;
 }
-
-
-
 
 ///////////////BUSSTOP////////////////////////////////
 
@@ -90,7 +84,7 @@ BusStop::BusStop(Vertex<Node> *node, string address)
 	this->node = node;
 	this->address = address;
 }
-vector<Student*>* BusStop::getStudentsInStop()
+vector<Student *> *BusStop::getStudentsInStop()
 {
 	return &studentsInStop;
 }
@@ -131,10 +125,10 @@ void Bus::setOccupation(int occupation)
 
 void Bus::getInfo()
 {
-	cout<<endl;
+	cout << endl;
 	cout << "------------------------" << endl;
-	cout << "|apt: "<< apt       << endl;
-	cout << "|Capacity: "<< capacity      << endl;
+	cout << "|apt: " << apt << endl;
+	cout << "|Capacity: " << capacity << endl;
 	cout << "------------------------" << endl;
 }
 
@@ -146,4 +140,3 @@ Garage::Garage(vector<Bus> busesInGarage, int numberOfBuses, Vertex<Node> *node)
 	this->numberOfBuses = numberOfBuses;
 	this->node = node;
 }
-

@@ -12,19 +12,19 @@
 
 using namespace std;
 
+class Node
+{
 
-class Node {
-	
 	/**@brief Node ID;  */
 	int id;
-	
+
 	/**@brief X coordinate;  */
 	float x;
-	
+
 	/**@brief Y coordinate;  */
 	float y;
 
-	public:
+public:
 	/**
 	 * @brief Construct a new Node object
 	 * 
@@ -32,49 +32,54 @@ class Node {
 	 * @param x X coordinate
 	 * @param y Y coordinate
 	 */
-	Node(int id, float x, float y) { this->id = id; this->x = x; this->y = y; }
+	Node(int id, float x, float y)
+	{
+		this->id = id;
+		this->x = x;
+		this->y = y;
+	}
 
 	/**
 	 * @brief Gets node ID
 	 * 
 	 * @return int ID Node id
 	 */
-	int getID(){ return id;}
+	int getID() { return id; }
 
 	/**
 	 * @brief Gets node X coordinate
 	 * 
 	 * @return float Node's X coordinate
 	 */
-	float getX(){return x;}
+	float getX() { return x; }
 
 	/**
 	 * @brief Gets node Y coordinate
 	 * 
 	 * @return float Node's Y coordinate
 	 */
-	float getY(){return y;}
+	float getY() { return y; }
 
 	/**
 	 * @brief Sets the Id
 	 * 
 	 * @param id new id
 	 */
-	void setId(int id){this->id = id;}
+	void setId(int id) { this->id = id; }
 
 	/**
 	 * @brief Sets the X coordinate
 	 * 
 	 * @param x new X 
 	 */
-	void setX(float x){this->x = x;}
+	void setX(float x) { this->x = x; }
 
 	/**
 	 * @brief Sets the X coordinate
 	 * 
 	 * @param y 
 	 */
-	void setY(float y){this->y = y;}
+	void setY(float y) { this->y = y; }
 
 	/**
 	 * @brief operator used to compare nodes
@@ -83,7 +88,8 @@ class Node {
 	 * @return true if nodes are the same
 	 * @return false if nodes are not the same
 	 */
-	bool operator == (Node other) {
+	bool operator==(Node other)
+	{
 		if (this->id == other.getID())
 			if (this->x == other.getX())
 				if (this->y == other.getY())
@@ -96,7 +102,8 @@ class Node {
 	 * 
 	 * @param other node to be copied
 	 */
-	void operator = (Node other) {
+	void operator=(Node other)
+	{
 		this->id = other.getID();
 		this->x = other.getX();
 		this->y = other.getY();
@@ -108,15 +115,15 @@ class Node {
 	 * @param other node at unkown distance
 	 * @return double distance between the nodes
 	 */
-	double getDistance(Node other) {
+	double getDistance(Node other)
+	{
 		return sqrt(pow(this->x - other.getX(), 2) + pow(this->y - other.getY(), 2));
 	}
-	
 };
 
+class School
+{
 
-class School {
-	
 	/**@brief school's name;  */
 	string name;
 
@@ -134,7 +141,7 @@ public:
 	 * @brief Construct a new School object
 	 * 
 	 */
-	School(){}
+	School() {}
 	/**
 	 * @brief Construct a new School object
 	 * 
@@ -192,17 +199,18 @@ public:
 	 * 
 	 * @param node new node
 	 */
-	void setNode(Vertex<Node>* node) { this->node = node; }
+	void setNode(Vertex<Node> *node) { this->node = node; }
 
 	/**
 	 * @brief Get school's vertex
 	 * 
 	 * @return Vertex<Node>* node
 	 */
-	Vertex<Node>* getNode() { return node; }
+	Vertex<Node> *getNode() { return node; }
 };
 
-class Student {
+class Student
+{
 
 	/**@brief Student name;  */
 	string name;
@@ -260,21 +268,24 @@ public:
 	 * @return true if students are the same
 	 * @return false if students are not the same
 	 */
-	bool operator ==(Student other){
-		if(this->name == other.getName() && this->age == other.getAge())
-				return true;
-			else return false;
+	bool operator==(Student other)
+	{
+		if (this->name == other.getName() && this->age == other.getAge())
+			return true;
+		else
+			return false;
 	}
 };
 
-class BusStop {
+class BusStop
+{
 
 	/**@brief vector of students in the busStop;  */
-	vector<Student*> studentsInStop;
-	
+	vector<Student *> studentsInStop;
+
 	/**@brief busStop address;  */
 	string address;
-	
+
 	/**@brief node where it's located;  */
 	Vertex<Node> *node;
 
@@ -285,42 +296,42 @@ public:
 	 * @param node Vertex that contains Bus Stop location
 	 * @param address of the Bus Stop
 	 */
-	BusStop(Vertex<Node> *node,string address);
+	BusStop(Vertex<Node> *node, string address);
 
 	/**
 	 * @brief Get pointer to vector containing the students at this bus stop
 	 * 
 	 * @return vector<Student*>* pointer to vector containing the students
 	 */
-	vector<Student*>* getStudentsInStop();
+	vector<Student *> *getStudentsInStop();
 
 	/**
 	 * @brief Adds a student to the Bus Stop
 	 * 
 	 * @param student to be added
 	 */
-	void addStudentInStop(Student* student){studentsInStop.push_back(student);}
+	void addStudentInStop(Student *student) { studentsInStop.push_back(student); }
 
 	/**
 	 * @brief Erases a student from the Bus Stop
 	 * 
 	 * @param index of the student in studentsInStop vector
 	 */
-	void eraseStudentInStop(int index){studentsInStop.erase(studentsInStop.begin() + index);}
+	void eraseStudentInStop(int index) { studentsInStop.erase(studentsInStop.begin() + index); }
 
 	/**
 	 * @brief Get the Address of the bus stop
 	 * 
 	 * @return string addrees
 	 */
-	string getAddress(){return address;}
+	string getAddress() { return address; }
 
 	/**
 	 * @brief Set the Address of the bus stop
 	 * 
 	 * @param address new bus stop address
 	 */
-	void setAddress(string address){this->address = address;}
+	void setAddress(string address) { this->address = address; }
 
 	/**
 	 * @brief Set the Node(Vertex<Node>) of the bus stop 
@@ -328,28 +339,28 @@ public:
 	 * @param node new Vertex<Node>
 	 */
 	void setNode(Vertex<Node> *node) { this->node = node; }
-	
+
 	/**
 	 * @brief Get the Node(Vertex<Node>) of the bus stop
 	 * 
 	 * @return Vertex<Node>* Vertex
 	 */
-	Vertex<Node> * getNode() { return node; }
+	Vertex<Node> *getNode() { return node; }
 };
 
-class Bus {
+class Bus
+{
 
 	/**@brief true if the bus isn't apt;  */
 	bool apt;
-	
+
 	/**@brief bus capatity;  */
 	int capacity;
-	
+
 	/**@brief number of students in the bus;  */
 	int occupation;
 
 public:
-
 	/**
 	 * @brief Construct a new Bus object
 	 * 
@@ -358,20 +369,20 @@ public:
 	 * @param occupation - bus's curret occupation
 	 */
 	Bus(bool apt, int capacity, int occupation);
-	
+
 	/**
 	 * @brief Get the bus's destination
 	 * 
 	 * @return School* - pointer to a School object that corresponds to the bus destination
 	 */
-	School* getSchool();
+	School *getSchool();
 
 	/**
 	 * @brief Set the bus's destination
 	 * 
 	 * @param school - pointer to a School object that corresponds to the bus destination
 	 */
-	void setSchool(School* school);
+	void setSchool(School *school);
 
 	/**
 	 * @brief Get the Apt object
@@ -401,7 +412,7 @@ public:
 	 * @param capacity 
 	 */
 	void setCapacity(int capacity);
-	
+
 	/**
 	 * @brief Get the bus Occupation
 	 * 
@@ -423,7 +434,8 @@ public:
 	void getInfo();
 };
 
-class Garage {
+class Garage
+{
 
 	/**@brief number of buses in the bus;  */
 	int numberOfBuses;
@@ -435,7 +447,6 @@ class Garage {
 	Vertex<Node> *node;
 
 public:
-
 	/**
 	 * @brief Construct a new Garage object
 	 * 
@@ -449,35 +460,35 @@ public:
 	 * @brief Construct a new Garage object
 	 * 
 	 */
-	Garage(){}
+	Garage() {}
 
 	/**
 	 * @brief Get the Buses vector
 	 * 
 	 * @return vector<Bus > vector of buses
 	 */
-	vector<Bus > getBuses(){return companyVehicles;}
+	vector<Bus> getBuses() { return companyVehicles; }
 
 	/**
 	 * @brief Get the vertex object
 	 * 
 	 * @return Vertex<Node>* vertex
 	 */
-	Vertex<Node> *getNode(){return node;}
+	Vertex<Node> *getNode() { return node; }
 
 	/**
 	 * @brief Adds a new bus to the garage
 	 * 
 	 * @param bus new bus to be added
 	 */
-	void addBus(Bus bus){companyVehicles.push_back(bus);}
+	void addBus(Bus bus) { companyVehicles.push_back(bus); }
 
 	/**
 	 * @brief removed a bus from the buses vector
 	 * 
 	 * @param index of the bus to be removed
 	 */
-	void eraseBus(int index){companyVehicles.erase(companyVehicles.begin() + index);}
+	void eraseBus(int index) { companyVehicles.erase(companyVehicles.begin() + index); }
 };
 
 #endif /* SCHOOLBUS_H_ */
