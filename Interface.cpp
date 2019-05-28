@@ -15,6 +15,17 @@ vector<string> cityVec = {"Aveiro", "Braga", "Coimbra", "Ermesinde", "Fafe", "Go
 DataManager dataMan;
 void main_menu();
 
+//INPUT VALIDATION//
+/**
+ * @brief Checks if the string inputed has a number when it is not supposed to
+ * @param s String to be analyzed
+ * @return Holds true if the string is correct
+ */
+bool hasNumber(string s)
+{
+    return(s.find_first_of("0123456789") == string::npos);
+}
+
 ////GENERAL FUNCTIONS//// (used throughout project, mostly for input verification)
 int Nav(int bottom, int top)
 { //tests for valid input keys and returns the inputed char
@@ -57,6 +68,11 @@ void removeStudent()
 	string name;
 	cout<<"What's the Student's name? "<<endl;
 	cin>>name;
+    while(!hasNumber(name))
+    {
+        cout << "Invalid name, try again: "<< endl;
+        cin>>name;
+    }
 	
 	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
 	{
@@ -111,8 +127,20 @@ void addStudent()
 
 	cout << "Student's Name" << endl;
 	cin >> name;
+    while(!hasNumber(name))
+    {
+        cout << "Invalid name, try again: "<< endl;
+        cin>>name;
+    }
 	cout << "Student's age" << endl;
 	cin >> age;
+	while(cin.fail())
+	{
+		cout << "Invalid age, try again: " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> age;
+	}
 	cout<<"What's the best busStop?"<<endl;
 
 	for (unsigned int i = 0; i < dataMan.getAllBusStops()->size(); i++)
@@ -137,7 +165,6 @@ void addStudent()
 			dataMan.increaseStudent(&s,i);
 			found = true;
 			break;  
-			
 		}
 			
 
@@ -162,13 +189,26 @@ void addVehicle()
 
 	cout << "Bus ID" << endl;
 	cin >> id;
+	while(cin.fail())
+	{
+		cout << "Invalid ID, try again: " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> id;
+	}
 	cout << "Bus capacity" << endl;
 	cin >> capacity;
+	while(cin.fail())
+	{
+		cout << "Invalid capacity, try again: " << endl;
+		cin.clear();
+		cin.ignore(100, '\n');
+		cin >> capacity;
+	}
 
 
 Bus bus(id,1,capacity,0);
 dataMan.addBusToGarage(bus);
-cout<<"nr buses" << dataMan.getGarage().getBuses().size()<<endl;
 
 }
 
@@ -322,16 +362,24 @@ void drawResult(vector<Node> path){
 void drawMultiPaths(vector<vector<Node>> path){
 	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
 
+	int minX = dataMan.graph.getVertexSet().at(0)->getInfo().getX();
+	int minY = dataMan.graph.getVertexSet().at(0)->getInfo().getY();
+
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+
+		if(x < minX) minX = x;
+		if(y < minY) minY = y;
+	}
+
 	GraphViewer gv = GraphViewer(1000,1000,false);
 	gv.createWindow(1000,1000);
 
 	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
 		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-		int r = 2500;
-		x%=r;
-		y%=r;
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX() - minX;
+		int y = minY - dataMan.graph.getVertexSet().at(i)->getInfo().getY();
 		gv.addNode(idNo, x, y);
 	}
 
@@ -354,7 +402,8 @@ void drawMultiPaths(vector<vector<Node>> path){
 				int idNo2 = adj.at(k).getDst().getInfo().getID();
 				gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
 				if(isInPath(subPath,idNo1,idNo2)){
-					gv.setEdgeColor(idA,colors.at(i));
+					gv.setEdgeThickness(idA,1.5);
+					gv.setEdgeColor(idA,colors.at(i%9));
 				}
 				idA++;
 			}
@@ -474,7 +523,7 @@ void city_menu()
 	string nodeFile ="T05/" + cityVec.at(choice) + "/T05_nodes_X_Y_"+ cityVec.at(choice) + ".txt";
 	string edgeFile = "T05/" + cityVec.at(choice) + "/T05_edges_" + cityVec.at(choice) + ".txt";
 	string tagFile = "T05/" + cityVec.at(choice) + "/T05_tags_" + cityVec.at(choice) + ".txt";
-	cout<<nodeFile<<" "<< edgeFile<<" "<<tagFile<<" "<<endl;
+	//cout<<nodeFile<<" "<< edgeFile<<" "<<tagFile<<" "<<endl;
 
 	dataMan.readNodeFile(nodeFile);
 	dataMan.readEdgeFile(edgeFile);

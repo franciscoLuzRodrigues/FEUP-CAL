@@ -39,6 +39,8 @@ int DataManager::readNodeFile(string fileName)
 
 	while (!nodeFile.eof()) {
 		getline(nodeFile, nodeInfo);
+		cout <<endl<<nodeInfo<<"node"<<endl;
+		fflush(stdout);
 		nodeId = stoi(nodeInfo.substr(1, nodeInfo.find(',') - 1));
 		nodeInfo.erase(0, nodeInfo.find(',') + 2);
 		nodeX = stof(nodeInfo.substr(0, nodeInfo.find(',')));
@@ -75,7 +77,8 @@ int DataManager::readEdgeFile(string fileName) {
 	getline(edgeFile, edgeInfo);
 
 	while (!edgeFile.eof()) {
-
+		cout <<endl<<"edge"<<endl;
+		fflush(stdout);
 		getline(edgeFile, edgeInfo);
 		edgeSrc = stoi(edgeInfo.substr(1, edgeInfo.find(',') - 1));
 		edgeInfo.erase(0, edgeInfo.find(',') + 2);
@@ -111,7 +114,8 @@ int DataManager::loadPointsOfInterest(string fileName) {
 			break;
 		}
 
-
+		cout <<endl<<line<<"poi"<<endl;
+		fflush(stdout);
 		nodeID = stoi(line.substr(0, line.find(',')));
 		line.erase(0, line.find(',') + 2);
 		sName = line.substr(0, line.find(','));
@@ -142,7 +146,9 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		{
 			break;
 		}
+		cout <<endl<<line<<"house"<<endl;
 		nodeID = stoi(line.substr(0, line.find(',')));
+		cout <<endl<<nodeID<<"house"<<endl;
 		line.erase(0, line.find(',') + 2);
 		BSaddress = line.substr(0, line.find(','));
 
@@ -158,10 +164,12 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		}
 
 	}
+	cout <<endl<<line<<endl;
+	fflush(stdout);
 	getline(poiFile,line);
-
+	cout <<endl<<line<<"garage"<<endl;
 	for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
-	{
+	{	cout <<line<<endl;
 		if(graph.getVertexSet().at(i)->getInfo().getID() == stoi(line))
 		{
 			vector<Bus> buses;
@@ -171,8 +179,11 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		}
 	}
 
-	//cout <<"\nDataMan School vec size: "<< schools.size();
-	//cout<<"\nDataMan AllbusStops vec size: "<<allBusStops.size()<<endl;
+	cout<<endl;
+	cout << endl << "--------------" << endl;
+	cout << "Load Finished!" << endl;
+	cout << "--------------" << endl << endl;
+	cout<<endl;
 	return 0;
 
 }
@@ -184,22 +195,17 @@ void DataManager::increaseStudent(Student* student, int index)
 
 void DataManager::updateQ(vector<Node> newBusStop)
 {
-	cout << "\n\t updating Q\n";
+
 	while (!nearestV.empty())
 	{
 		nearestV.extractMin();
 	}
 
-	if(nearestV.empty())
-	{cout<< "\n\t Q is empty\n";}
 
-	cout<<"\nInserting "<<newBusStop.size() << endl;
 	for (unsigned int i = 0; i < newBusStop.size(); i++)
 	{
-		cout<< "Entered for\n";
 		Vertex<Node> *v = graph.findVertex(newBusStop.at(i));
 		nearestV.insert(v);
-		cout<< "Inserted in q, node with id: "<< v->getInfo().getID()<< endl;
 	}
 }
 
@@ -212,7 +218,7 @@ void DataManager::eraseNodeWithID(vector<Node>& bStops, int id){
 	}
 }
 
-
+/*
 void DataManager::printStudentAddress(string name)
 {
 	for(unsigned int i=0;i<busStops.size(); i++)
@@ -227,7 +233,7 @@ void DataManager::printStudentAddress(string name)
 			}
 		}
 	}
-}
+}*/
 
 
 vector<Node> DataManager::toVecNode(vector<BusStop> b)
@@ -243,10 +249,8 @@ vector<Node> DataManager::toVecNode(vector<BusStop> b)
 
 BusStop *DataManager::getBusStopByNode(vector<BusStop> &temp, Vertex<Node> *node)
 {
-	cout<<"ENCONTRAR O NODE" << node->getInfo().getID()<<"TEMP size"<<temp.size()<<endl;
 	for(unsigned int i=0; i< temp.size(); i++)
 	{
-		cout<<"HIPOTESES" << temp.at(i).getNode()->getInfo().getID()<<endl;
 		if(temp.at(i).getNode()->getInfo().getID() == node->getInfo().getID())
 		{
 
@@ -292,19 +296,16 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 	vector<vector<Node>> bsVec;
 	if(busStops.size() == 0)
 	{
-		cout << "There arent bus stops"<<endl;
 		return bsVec;
 	}
 
 	if(garage.getBuses().size() == 0)
 	{
-		cout << "There arent buses"<<endl;
 		return bsVec;
 	}
 
 	if (verifyNumberStudents())
 	{
-		cout << "There aren´t enough buses"<<endl;
 		return bsVec;
 	}
 
@@ -347,7 +348,6 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 			else
 			{
 				occupation += b->getStudentsInStop().size();
-				//cout<<"NODE ID para o vec"<< node->getInfo().getID()<<endl;
 				busXpath.push_back(node->getInfo());
 				int j = getIndexFromTemp(temp, b->getNode()->getInfo().getID());
 				temp.erase(temp.begin()+j);
@@ -359,10 +359,6 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 
 		}
 
-		/*	for(unsigned int i=0; i< busXpath.size();i++)
-		{
-			cout<<"busXpath"<<busXpath.at(i).getID()<<endl;
-		}*/
 		i++;
 		vector<Node> path;
 		path = getPathNodes(busXpath);
@@ -416,7 +412,6 @@ vector<vector<Node>> DataManager::getPath() //Returns vector assembled Paths
 	for(unsigned int k=0; k<pathNode.size(); k++)
 	{
 		for(unsigned int i = 0 ; i < pathNode.at(k).size(); i++){
-			cout << "ID: "<< pathNode.at(k).at(i).getID()<<endl;
 		}
 		vector<Node> temp, nodePath;
 		nodePath.push_back(garage.getNode()->getInfo());
@@ -428,10 +423,8 @@ vector<vector<Node>> DataManager::getPath() //Returns vector assembled Paths
 
 			for(unsigned int i = 1;i < temp.size(); i++){
 				nodePath.push_back(temp.at(i));
-				cout<<"temp "<<temp.at(i).getID();
 			}
 		
-			cout<<endl;
 		}
 		finalPath.push_back(nodePath);
 	}

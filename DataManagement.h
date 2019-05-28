@@ -58,7 +58,7 @@ public:
 	void increaseStudent(Student *student, int index);
 	void updateQ(vector<Node> newBusStop);
 	bool verifyNumberStudents();
-	void printStudentAddress(string name);
+
 };
 
 #endif /* DATA_MANAGEMENT_H_ */
