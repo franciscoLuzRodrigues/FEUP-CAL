@@ -74,14 +74,17 @@ public:
 class Student {
 	string name;
 	int age;
+	int id;
 
 public:
-	Student(string name, int age);
+	Student(string name, int age, int id);
 	string getName();
 	void setName(string name);
 	int getAge();
 	void setAge(int age);
 	void getInfo();
+	int getId(){return id;}
+	void setId(int id){this->id = id;}
 };
 
 class BusStop {
@@ -91,7 +94,7 @@ class BusStop {
 
 public:
 	BusStop(Vertex<Node> *node,string address);
-	vector<Student*> getStudentsInStop();
+	vector<Student*>* getStudentsInStop();
 	void addStudentInStop(Student* student){studentsInStop.push_back(student);}
 	void eraseStudentInStop(int index){studentsInStop.erase(studentsInStop.begin() + index);}
 	string getAddress(){return address;}

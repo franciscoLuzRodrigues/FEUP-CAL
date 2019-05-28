@@ -43,10 +43,11 @@ void School::setAfternoonTime(int time)
 
 ////////////////STUDENT///////////////////////////////
 
-Student::Student(string name, int age)
+Student::Student(string name, int age, int id)
 {
 	this->name = name;
 	this->age = age;
+	this->id = id;
 
 }
 
@@ -88,9 +89,9 @@ BusStop::BusStop(Vertex<Node> *node, string address)
 	this->node = node;
 	this->address = address;
 }
-vector<Student*> BusStop::getStudentsInStop()
+vector<Student*>* BusStop::getStudentsInStop()
 {
-	return studentsInStop;
+	return &studentsInStop;
 }
 
 //////////////BUS/////////////////////////////////////

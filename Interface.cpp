@@ -54,23 +54,19 @@ void showStudents()
 
 void removeStudent()
 {
-	string name;
+	int remStuId;
 	cout<<"What's the Student's name? "<<endl;
-	cin>>name;
+	cin>>remStuId;
 	
 	for(unsigned int i=0;i<dataMan.getBusStops()->size(); i++)
 	{
-		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop().size();
-		cout<<"busStopSize "<<dataMan.getBusStops()->at(i).getStudentsInStop().size()<<endl;
+		int studentSize = dataMan.getBusStops()->at(i).getStudentsInStop()->size();
+		cout<<"busStopSize "<<dataMan.getBusStops()->at(i).getStudentsInStop()->size()<<endl;
 		for(int j=0; j< studentSize; j++)
 		{
-			cout<<"im burro "<< dataMan.getBusStops()->at(i).getStudentsInStop().at(j)->getName()<<endl;
-			Student studentInStop =*dataMan.getBusStops()->at(i).getStudentsInStop().at(j);
-			cout<<"Name q aparece "<<studentInStop.getName()<<" name pedido "<<name<<endl;
 			fflush(stdout);
-			if(studentInStop.getName() == name)
+			if(dataMan.getBusStops()->at(i).getStudentsInStop()->at(j)->getId() == remStuId)//studentInStop.getName() == name)
 			{
-				cout<<"studentSize"<<studentSize<<endl;
 				if(studentSize > 1)
 				{
 					cout<<"entrei no >1"<<endl;
@@ -94,7 +90,7 @@ void removeStudent()
 
 	for(unsigned int i=0; i<dataMan.getStudents().size(); i++)
 		{
-			if(dataMan.getStudents().at(i).getName() == name)
+			if(dataMan.getStudents().at(i).getId() == remStuId)
 			{
 				dataMan.eraseStudent(i);
 				break;
@@ -103,7 +99,7 @@ void removeStudent()
 }
 void addStudent()
 {
-	Student s = Student("", 0);
+	Student s = Student("", 0, dataMan.getStudents().size()+1);
 	int choice;
 	string name;
 	int age;
@@ -146,7 +142,7 @@ void addStudent()
 	{
 		cout<< "\nHere"<< endl;
 		dataMan.getAllBusStops()->at(choice).addStudentInStop(&s);
-		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop().size()<<endl;
+		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop()->size()<<endl;
 		dataMan.addBusStop(dataMan.getAllBusStops()->at(choice));
 
 	}
@@ -322,16 +318,24 @@ void drawResult(vector<Node> path){
 void drawMultiPaths(vector<vector<Node>> path){
 	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
 
+	int minX = dataMan.graph.getVertexSet().at(0)->getInfo().getX();
+	int minY = dataMan.graph.getVertexSet().at(0)->getInfo().getY();
+
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
+
+		if(x < minX) minX = x;
+		if(y < minY) minY = y;
+	}
+
 	GraphViewer gv = GraphViewer(1000,1000,false);
 	gv.createWindow(1000,1000);
 
 	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
 		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
-		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
-		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
-		int r = 2500;
-		x%=r;
-		y%=r;
+		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX() - minX;
+		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY() - minY;
 		gv.addNode(idNo, x, y);
 	}
 

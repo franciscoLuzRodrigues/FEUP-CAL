@@ -217,10 +217,10 @@ void DataManager::printStudentAddress(string name)
 {
 	for(unsigned int i=0;i<busStops.size(); i++)
 	{
-		int studentSize = busStops.at(i).getStudentsInStop().size();
+		int studentSize = busStops.at(i).getStudentsInStop()->size();
 		for(unsigned int j=0; j< studentSize; j++)
 		{
-			if(busStops.at(i).getStudentsInStop().at(j)->getName() == name)
+			if(busStops.at(i).getStudentsInStop()->at(j)->getName() == name)
 			{
 				cout<<"|Address: "<<busStops.at(i).getAddress()<<endl;
 				cout<<"|-----------------------"<<endl;
@@ -269,7 +269,7 @@ bool DataManager::verifyNumberStudents()
 
 	for (unsigned int i = 0; i < busStops.size(); i++)
 	{
-		numStudents += busStops.at(i).getStudentsInStop().size();
+		numStudents += busStops.at(i).getStudentsInStop()->size();
 	}
 
 	return numStudents > busTotalCapacity;
@@ -292,7 +292,7 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 	vector<vector<Node>> bsVec;
 	if(busStops.size() == 0)
 	{
-		cout << "There arent bus stops"<<endl;
+		cout << "There aren't bus stops"<<endl;
 		return bsVec;
 	}
 
@@ -328,7 +328,7 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 			Vertex<Node>* node = nearestV.extractMin();
 			BusStop* b = getBusStopByNode(temp, node); 
 
-			int numS = b->getStudentsInStop().size();
+			int numS = b->getStudentsInStop()->size();
 
 
 
@@ -346,7 +346,7 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 			}
 			else
 			{
-				occupation += b->getStudentsInStop().size();
+				occupation += b->getStudentsInStop()->size();
 				//cout<<"NODE ID para o vec"<< node->getInfo().getID()<<endl;
 				busXpath.push_back(node->getInfo());
 				int j = getIndexFromTemp(temp, b->getNode()->getInfo().getID());
