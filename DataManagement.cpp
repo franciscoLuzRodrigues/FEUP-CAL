@@ -56,6 +56,7 @@ int DataManager::readNodeFile(string fileName)
 	return 0;
 }
 
+
 Node getNode(int id, Graph<Node> &graph) {
 	Node node(-1,-1,-1);
 	for (auto v : graph.getVertexSet()) {
@@ -184,6 +185,31 @@ int DataManager::loadPointsOfInterest(string fileName) {
 	cout << "--------------------" << endl << endl;
 	cout<<endl;
 	return 0;
+
+}
+
+void DataManager::organizeBuses()
+{
+	vector<Bus> vec;
+	int max = 0, ind;
+
+	while(!garage.getBuses().empty()){
+		max = 0;
+		ind =1000;
+		for(unsigned int i = 0; i < garage.getBuses().size(); i++){
+				if(garage.getBuses().at(i).getCapacity() >max){
+					max = garage.getBuses().at(i).getCapacity();
+					ind = i;
+				}
+			}
+
+			vec.push_back(garage.getBuses().at(ind));
+			garage.eraseBus(ind);
+	}
+
+	for(unsigned int j = 0; j < vec.size(); j++){
+		garage.addBus(vec.at(j));
+	}
 
 }
 

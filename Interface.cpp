@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
+#include <sys/timeb.h>
 #include "Graph.h"
 #include "SchoolBus.h"
 #include "DataManagement.h"
@@ -10,6 +10,27 @@
 #include <string>
 
 using namespace std;
+
+
+
+
+int getMilliCount(){
+	timeb tb;
+	ftime(&tb);
+	int nCount = tb.millitm + (tb.time & 0xfffff) * 1000;
+	return nCount;
+}
+
+int getMilliSpan(int nTimeStart){
+	int nSpan = getMilliCount() - nTimeStart;
+	if(nSpan < 0)
+		nSpan += 0x100000 * 1000;
+	return nSpan;
+}
+
+
+
+
 
 vector<string> cityVec = {"Aveiro","Coimbra", "Porto"};
 DataManager dataMan;
@@ -387,6 +408,7 @@ void schoolChoice_menu()
 
 	dataMan.setSchool(dataMan.getSchools().at(choice));
 
+	dataMan.organizeBuses();
 	vector<vector<Node>> p = dataMan.getPath();
 
 	if (p.size() == 0)
@@ -396,7 +418,11 @@ void schoolChoice_menu()
 	}
 
 	//drawResult(p.at(0));
+
 	drawMultiPaths(p);
+
+	for(int i = 0; i < dataMan.getGarage().getBuses().size();i++)
+		cout << i<< " "<< dataMan.getGarage().getBuses().at(i).getCapacity()<<endl;
 
 	main_menu();
 }

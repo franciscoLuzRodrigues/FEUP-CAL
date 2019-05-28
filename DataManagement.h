@@ -239,6 +239,8 @@ public:
 	 * @return false otherwise
 	 */
 	bool verifyNumberStudents();
+
+	void organizeBuses();
 };
 
 #endif /* DATA_MANAGEMENT_H_ */
