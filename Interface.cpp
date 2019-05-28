@@ -11,7 +11,7 @@
 
 using namespace std;
 
-vector<string> cityVec = {"Aveiro", "Braga", "Coimbra", "Ermesinde", "Fafe", "Gondomar", "Lisboa", "Maia", "Porto", "Viseu", "MapTest1"};
+vector<string> cityVec = {"Aveiro","Coimbra", "Porto"};
 DataManager dataMan;
 void main_menu();
 
@@ -65,6 +65,11 @@ void showStudents()
 
 void removeStudent()
 {
+	if (dataMan.getStudents().size() == 0)
+	{
+		cout << "There are no Students to delete." << endl;
+		return;
+	}
 	int remStuId;
 	cout << "What's the Student's Id? " << endl;
 	cin >> remStuId;
@@ -151,7 +156,6 @@ void addStudent()
 	if (!found)
 	{
 		dataMan.getAllBusStops()->at(choice).addStudentInStop(&s);
-		cout << dataMan.getAllBusStops()->at(choice).getStudentsInStop()->size() << endl;
 		dataMan.addBusStop(dataMan.getAllBusStops()->at(choice));
 	}
 }
@@ -199,10 +203,12 @@ void removeVehicle()
 	if (dataMan.getGarage().getBuses().size() == 0)
 	{
 		cout << "There are no buses to delete." << endl;
+		return;
 	}
 	int id;
 	cout << "Vehicle ID" << endl;
 	cin >> id;
+
 	while (cin.fail() || dataMan.getGarage().getBuses().size() < id)
 	{
 		cout << "Invalid Id, try again: " << endl;
@@ -226,61 +232,59 @@ bool isInPath(vector<Node> path, int ID1, int ID2)
 	return false;
 }
 
-void drawMultiPaths(vector<vector<Node>> path)
-{
+void drawMultiPaths(vector<vector<Node>> path){
 	vector<string> colors = {"ORANGE", "RED", "GREEN", "CYAN", "YELLOW", "MAGENTA", "PINK", "WHITE", "GRAY"};
 
 	int minX = dataMan.graph.getVertexSet().at(0)->getInfo().getX();
 	int minY = dataMan.graph.getVertexSet().at(0)->getInfo().getY();
 
-	for (unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++)
-	{
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
 		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX();
 		int y = dataMan.graph.getVertexSet().at(i)->getInfo().getY();
 
-		if (x < minX)
-			minX = x;
-		if (y < minY)
-			minY = y;
+		if(x < minX) minX = x;
+		if(y < minY) minY = y;
 	}
 
-	GraphViewer gv = GraphViewer(1000, 1000, false);
-	gv.createWindow(1000, 1000);
+	GraphViewer gv = GraphViewer(1000,1000,false);
+	gv.createWindow(1000,1000);
 
-	for (unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++)
-	{
+	for(unsigned int i = 0; i < dataMan.graph.getNumVertex(); i++){
 		int idNo = dataMan.graph.getVertexSet().at(i)->getInfo().getID();
 		int x = dataMan.graph.getVertexSet().at(i)->getInfo().getX() - minX;
 		int y = minY - dataMan.graph.getVertexSet().at(i)->getInfo().getY();
 		gv.addNode(idNo, x, y);
 	}
 
-	for (int i = 0; i < path.size(); i++)
-	{
+	int idNo1 = path.at(0).at(0).getID();
+	gv.setVertexColor(idNo1,RED);
+
+	vector<Node> sub = path.at(path.size()-1);
+
+	idNo1 = sub.at(sub.size()-1).getID();
+	gv.setVertexColor(idNo1,BLUE);
+
+	for(int i = 0; i < path.size(); i++){
 		vector<Node> subPath = path.at(i);
 
-		for (unsigned int j = 0; j < subPath.size(); j++)
-		{
+		for(unsigned int j = 0; j < subPath.size(); j++){
 			int idNo = subPath.at(j).getID();
-			gv.setVertexColor(idNo, MAGENTA);
+			gv.setVertexColor(idNo,MAGENTA);
 		}
 
 		int idA = 0;
 
-		for (int j = 0; j < dataMan.graph.getNumVertex(); j++)
-		{
+		for(int j = 0; j < dataMan.graph.getNumVertex(); j++){
 			int idNo1 = dataMan.graph.getVertexSet().at(j)->getInfo().getID();
 
-			vector<Edge<Node>> adj = dataMan.graph.getVertexSet().at(j)->getAdj();
+			vector<Edge<Node> > adj = dataMan.graph.getVertexSet().at(j)->getAdj();
 
-			for (unsigned int k = 0; k < adj.size(); k++)
-			{
+			for(unsigned int k = 0; k < adj.size(); k++){
 				int idNo2 = adj.at(k).getDst().getInfo().getID();
 				gv.addEdge(idA, idNo1, idNo2, EdgeType::DIRECTED);
-				if (isInPath(subPath, idNo1, idNo2))
-				{
-					gv.setEdgeThickness(idA, 1.5);
-					gv.setEdgeColor(idA, colors.at(i % 9));
+				if(isInPath(subPath,idNo1,idNo2)){
+					//gv.setEdgeThickness(idA,2);
+					gv.setEdgeColor(idA,colors.at(i%9));
 				}
 				idA++;
 			}
@@ -384,14 +388,6 @@ void schoolChoice_menu()
 	dataMan.setSchool(dataMan.getSchools().at(choice));
 
 	vector<vector<Node>> p = dataMan.getPath();
-
-	for (unsigned int i = 0; i < p.size(); i++)
-	{
-		for (unsigned int j = 0; j < p.at(i).size(); j++)
-		{
-			cout << "Bus " << i << " Node: " << p.at(i).at(j).getID() << endl;
-		}
-	}
 
 	if (p.size() == 0)
 	{

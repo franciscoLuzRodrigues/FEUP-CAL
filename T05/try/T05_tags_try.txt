@@ -1,0 +1,8 @@
+school
+6, AEVA - Escola Profissional de Aveiro, 9, 17
+house
+2, Rua Luis Bráz Abreu
+5, Rua da Liberdade
+7, oi
+garage
+1

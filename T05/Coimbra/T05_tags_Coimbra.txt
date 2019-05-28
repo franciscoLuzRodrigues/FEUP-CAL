@@ -1,27 +1,17 @@
 school
-1309535306, Escola EB 2,3 Inês de Castro, 8, 16
 250643020, Escola Secundaria Jaime Cortesão, 9, 17
-738186831, Escola Secundaria Quinta das flores, 10, 18
-234655318, Escola Secundaria Jose Falcao, 9, 13
-1269976663, Escola EB 2,3 Martim de Freitas, 14, 19
-1126015089, EB 2/3 Poeta Manuel da Silva Gaio, 8, 16
-1266165368, Escola Superior Agrária de Coimbra, 9, 15
+709656821, Escola Secundaria Quinta das flores, 10, 18
 house
-1108882763, Rua 1 de Maio
-743390539, Rua Ceramicas
-251774287, Rua Central
-100247890, Estrada Santa Luzia
-248641875, Rua Vale São Pedro
-1267980629, Estrada das Valas
-250736981, Rua Sao Martinho
-1279674712, Rua Vilarinho de baixo
-1267897688, Rua Rio da Velha
-181496699, Rua Lapas
-1107523969, Rua Santo Cristo
-1280746376, Rua alto da Mainca
-248700808, Rua do Açude
-867504530, Rua Alvaro Correia
-1264458130, Rua Luis de Camoes
-1280746389, Rua Antonio Jardim
-185887666, Rua Miguel Torga
-1263931827, Rua Casa Branca
+1267897688, Rua 1 de Maio
+848012301, Rua Ceramicas
+250641368, Rua Central
+135840599, Estrada Santa Luzia
+234641099, Rua Vale São Pedro
+148188282, Estrada das Valas
+148185234, Rua Sao Martinho
+729328555, Rua Vilarinho de baixo
+760848321, Rua Rio da Velha
+760853867, Rua Lapas
+251774997, Rua Santo Cristo
+garage
+1263931827

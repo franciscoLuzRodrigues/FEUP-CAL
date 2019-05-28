@@ -48,6 +48,11 @@ int DataManager::readNodeFile(string fileName)
 		Node node = Node(nodeId, nodeX, nodeY);
 		graph.addVertex(node);
 	}
+
+	cout<<endl;
+	cout << endl << "--------------------" << endl;
+	cout << "Nodes Load Finished!" << endl;
+	cout << "--------------------" << endl << endl;
 	return 0;
 }
 
@@ -84,6 +89,11 @@ int DataManager::readEdgeFile(string fileName) {
 		graph.addEdge(scr, dst, scr.getDistance(dst));
 		graph.addEdge(dst, scr, scr.getDistance(dst));
 	}
+
+	cout<<endl;
+	cout << endl << "--------------------" << endl;
+	cout << "Edges Load Finished!" << endl;
+	cout << "--------------------" << endl << endl;
 	return 0;
 }
 
@@ -109,7 +119,6 @@ int DataManager::loadPointsOfInterest(string fileName) {
 		{
 			break;
 		}
-
 		nodeID = stoi(line.substr(0, line.find(',')));
 		line.erase(0, line.find(',') + 2);
 		sName = line.substr(0, line.find(','));
@@ -159,7 +168,7 @@ int DataManager::loadPointsOfInterest(string fileName) {
 
 	getline(poiFile,line);
 	for(unsigned int i=0;i<graph.getVertexSet().size(); i++)
-	{	cout <<line<<endl;
+	{
 		if(graph.getVertexSet().at(i)->getInfo().getID() == stoi(line))
 		{
 			vector<Bus> buses;
@@ -170,9 +179,9 @@ int DataManager::loadPointsOfInterest(string fileName) {
 	}
 
 	cout<<endl;
-	cout << endl << "--------------" << endl;
-	cout << "Load Finished!" << endl;
-	cout << "--------------" << endl << endl;
+	cout << endl << "--------------------" << endl;
+	cout << "Tags Load Finished!" << endl;
+	cout << "--------------------" << endl << endl;
 	cout<<endl;
 	return 0;
 
@@ -297,14 +306,17 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 
 		while (occupation != capacity && !temp.empty())
 		{
-			//cout<<"while"<<temp.size()<<endl;
 
 			Vertex<Node>* node = nearestV.extractMin();
 			BusStop* b = getBusStopByNode(temp, node); 
 
 			int numS = b->getStudentsInStop()->size();
 
-
+			if(node->getDist()==INF)
+			{
+				cout<<"There is no path"<<endl;
+				//return bsVec;
+			}
 
 			if ((numS + occupation) > capacity)
 			{
@@ -315,6 +327,7 @@ vector<vector<Node>> DataManager::getMultPaths(){//Return vector of vectors with
 				}
 				occupation += numStudents;
 				nearestV.insert(node);
+
 				busXpath.push_back(node->getInfo());
 
 			}
